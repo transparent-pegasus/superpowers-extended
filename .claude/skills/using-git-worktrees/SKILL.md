@@ -96,6 +96,11 @@ esac
 # Create worktree with new branch
 git worktree add "$path" -b "$BRANCH_NAME"
 cd "$path"
+
+# Load project-local worktree env if available
+if command -v direnv >/dev/null 2>&1 && [ -f .envrc ]; then
+  direnv allow .
+fi
 ```
 
 ### 3. Run Project Setup
@@ -116,6 +121,8 @@ if [ -f pyproject.toml ]; then poetry install; fi
 # Go
 if [ -f go.mod ]; then go mod download; fi
 ```
+
+If the project contains `.envrc`, allow it before setup so `CARGO_TARGET_DIR` and related cache paths switch to the current worktree automatically.
 
 ### 4. Verify Clean Baseline
 
@@ -183,6 +190,7 @@ You: I'm using the using-git-worktrees skill to set up an isolated workspace.
 [Check .worktrees/ - exists]
 [Verify ignored - git check-ignore confirms .worktrees/ is ignored]
 [Create worktree: git worktree add .worktrees/auth -b feature/auth]
+[Run direnv allow .]
 [Run npm install]
 [Run npm test - 47 passing]
 
@@ -203,6 +211,7 @@ Ready to implement auth feature
 **Always:**
 - Follow directory priority: existing > CLAUDE.md > ask
 - Verify directory is ignored for project-local
+- Allow `.envrc` after `cd` when the project uses direnv-managed worktree env
 - Auto-detect and run project setup
 - Verify clean test baseline
 

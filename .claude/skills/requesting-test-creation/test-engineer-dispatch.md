@@ -7,7 +7,7 @@ Use this template to dispatch a test-engineer subagent.
 2. Read the behavior expectations from {PLAN_OR_REQUIREMENTS}.
 3. Create automated tests matching {INTERFACES_OR_TYPES}.
 4. Follow TDD: Tests must initially fail if implementation is incomplete (RED).
-5. Ensure tests check real behavior, edge cases, and error states.
+5. Ensure tests check real behavior, edge cases, and error states without relying on live network, cloud, container, hardware, or paid third-party dependencies unless explicitly requested.
 6. Verify tests pass (GREEN) if implementation is already complete.
 
 ## Target
@@ -37,7 +37,7 @@ Return a report containing:
 [List test files]
 
 ### Test Results
-[Output of `pnpm test` for these specific tests. Expected state: RED (failing correctly) or GREEN (passing correctly)]
+[Output of `<TARGETED_TEST_COMMAND>` for these specific tests. Expected state: RED (failing correctly) or GREEN (passing correctly)]
 
 ### Issues
 [Any bugs found in the implementation, unclear requirements, or untestable code]

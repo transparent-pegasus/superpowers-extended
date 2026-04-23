@@ -1,75 +1,87 @@
 # Development Cycle Guide
 
-This guide describes how to use the Superpowers development cycle to build and deliver high-quality code. The entire process is driven by the `/development_cycle` workflow.
+This guide describes the 6-phase Superpowers development cycle. The full cycle is driven by the `/full_cycle` workflow; `/plan`, `/execute`, `/execute_parallel`, and `/quick` run structured subsets.
 
 ## 6 Phases of Development
 
 ### Phase 1: Brainstorming (Design & Requirements)
 
-In this phase, the Gemini CLI will ask you what you want to build. You'll engage in a design and requirement gathering discussion. No implementation code is written at this stage.
+The agent asks what you want to build and engages in a design and requirements discussion. No implementation code is written at this stage.
 
-- **Purpose**: To define the feature's purpose, constraints, and success criteria.
-- **Outcome**: An approved architectural design.
-- **Tools**: `brainstorming` skill.
+- **Purpose**: Define the feature's purpose, constraints, and success criteria.
+- **Outcome**: An approved architectural design saved to `<DESIGN_DOC_PATH_PATTERN>` (not committed).
+- **Skill**: `brainstorming`.
 
 ---
 
 ### Phase 2: Workspace Isolation (Safe Development)
 
-Once the design is approved, a new branch and an isolated git worktree (e.g., `feature/xxx`) are created.
+Once the design is approved, a new branch and isolated git worktree (e.g., `feature/xxx`) are created.
 
-- **Purpose**: To ensure code safety and prevent context pollution.
-- **Tools**: `using-git-worktrees` skill.
+- **Purpose**: Keep main untouched and prevent context pollution between features.
+- **Skill**: `using-git-worktrees`.
 
 ---
 
 ### Phase 3: Plan Creation (Bite-Sized Tasks)
 
-The Gemini CLI breaks the approved design into small, achievable tasks. Each task is detailed with the specific files to touch and the tests to write.
+The agent breaks the approved design into small, achievable tasks. Each task specifies the exact files to touch and the tests to write.
 
-- **Purpose**: To create a clear, actionable roadmap for implementation.
-- **Outcome**: An implementation plan saved to `docs/plans/YYYY-MM-DD-feature.md`.
-- **Tools**: `writing-plans` skill.
+- **Purpose**: Create a clear, actionable roadmap.
+- **Outcome**: A plan saved to `<PLAN_PATH_PATTERN>` (not committed).
+- **Skill**: `writing-plans`.
 
 ---
 
 ### Phase 4: Implementation (TDD & Subagents)
 
-This is the active coding phase. Each task in the plan is executed sequentially using specialized subagents.
+The active coding phase. Each task in the plan is executed sequentially using specialized subagents.
 
-- **The Cycle**:
-    1.  Define interfaces and types.
-    2.  Dispatch the **Test Engineer** to write failing tests (**RED**).
-    3.  Implement the minimal code to pass the tests (**GREEN**).
-    4.  Refactor and self-review.
-    5.  Perform a two-stage review: **Spec Compliance** and **Code Quality**.
-- **Tools**: `subagent-driven-development` skill, `test-engineer` agent.
+- **The per-task cycle**:
+    1. Define interfaces and types.
+    2. Dispatch the **test-engineer** to write failing tests (**RED**) — in parallel with implementation.
+    3. Implement the minimal code to pass the tests (**GREEN**).
+    4. Self-review and commit.
+    5. Two-stage review: **Spec Compliance** first, then **Code Quality**.
+- **Skills**: `subagent-driven-development`, `requesting-test-creation`, `test-driven-development`.
+- **Agents**: `test-engineer`, `code-reviewer`.
 
 ---
 
 ### Phase 5: Final Code Review (Quality Assurance)
 
-After all tasks are complete, a final review of the entire changeset is performed by a senior-level agent.
+After all tasks complete, a final review of the entire changeset runs on the coordination branch.
 
-- **Purpose**: To ensure the overall implementation aligns with the plan and coding standards.
-- **Outcome**: A report with Critical, Important, and Suggestion-level issues.
-- **Tools**: `requesting-code-review` skill, `code-reviewer` agent.
+- **Purpose**: Ensure the overall implementation aligns with the plan and coding standards.
+- **Outcome**: A report with Critical / Important / Minor issues.
+- **Skill**: `requesting-code-review`. **Agent**: `code-reviewer`.
 
 ---
 
 ### Phase 6: Integration (Merge & Cleanup)
 
-The final step is to merge the verified changes into the main branch.
+The final step is to merge the verified changes into the base branch and clean up the worktree.
 
-- **Purpose**: To integrate the new feature and clean up the temporary workspace.
-- **Outcome**: A merged feature and a deleted git worktree.
-- **Tools**: `finishing-a-development-branch` skill.
+- **Purpose**: Integrate the new feature and remove the temporary workspace.
+- **Outcome**: A merged feature branch and a cleaned-up worktree.
+- **Skill**: `finishing-a-development-branch`.
 
 ---
 
+## Supporting Rules
+
+Throughout the cycle, these skills are always in play:
+
+- **`verification-before-completion`** — Before claiming anything works, run the verification command and read the output.
+- **`systematic-debugging`** — When something fails, find the root cause before proposing fixes.
+- **`update-docs`** — When code or config changes alter behavior covered in `docs/`, update the affected root docs.
+
 ## Your Role as a User
 
-The Gemini CLI is designed to be autonomous but not independent. Your role is:
-- **Review and Approve**: You must approve the design, the implementation plan, and the final merge.
-- **Provide Context**: Answer questions from subagents to clarify requirements.
-- **Confirm Success**: Validate that the implementation meets your expectations before merging.
+The agent is autonomous within a phase but not independent across phases. You:
+
+- **Review and approve**: Approve the design, the plan, and the final merge.
+- **Provide context**: Answer clarifying questions before the agent proceeds.
+- **Confirm success**: Validate that the implementation meets your expectations before merging.
+
+Every workflow (`/full_cycle`, `/plan`, `/execute`, `/execute_parallel`, `/quick`) blocks for user confirmation between phases. That is by design.

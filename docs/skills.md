@@ -1,44 +1,50 @@
 # Superpowers (Skills)
 
-Superpowers are specialized "skills" that extend the capabilities of AI assistants. These skills provide structured workflows, expert guidance, and automated procedures for various development tasks.
+Superpowers are structured "skills" — reference guides with procedures, flowcharts, and anti-patterns — that extend an AI agent's capabilities without bloating the session context. Each skill lives in its own directory with a `SKILL.md` plus any supporting files.
 
-Depending on your platform, these skills are located in:
-- **Gemini CLI / Codex**: `.agents/skills/`
-- **Claude Code**: `.claude/skills/`
+## Where Skills Live
 
-##  Strategic & Planning
+| Platform | Location |
+|---|---|
+| Claude Code | `.claude/skills/<name>/SKILL.md` |
+| Codex / Cursor / Gemini CLI | `.agents/skills/<name>/SKILL.md` |
 
-Skills used at the beginning of a feature's lifecycle to ensure a solid foundation.
+The two trees mirror each other. Edit both when adding or changing a skill.
 
-- **`brainstorming`**: From idea to approved design. Engages in requirement gathering and architecture discussion without writing code.
-- **`writing-plans`**: Breaks a design into bite-sized, achievable tasks assuming the engineer has zero codebase context.
+## Strategic & Planning
 
-##  Operational & Execution
+- **`brainstorming`** — Turn an idea into an approved design through one-question-at-a-time dialogue. Writes the design to `<DESIGN_DOC_PATH_PATTERN>` (do not commit). Terminal state is invoking `writing-plans`.
+- **`writing-plans`** — Break the approved design into bite-sized, TDD-shaped tasks. Writes the plan to `<PLAN_PATH_PATTERN>` (do not commit). Offers `subagent-driven-development` or `executing-plans` as next step.
 
-Skills used during the active implementation of a feature.
+## Operational & Execution
 
-- **`subagent-driven-development`**: The primary engine for implementation. Dispatches fresh subagents per task with a two-stage review process (Spec Compliance → Code Quality).
-- **`executing-plans`**: An alternative for batch execution with checkpoints, ideal for parallel sessions.
-- **`finishing-a-development-branch`**: Completes development work by guiding the merge, PR, or cleanup process.
+- **`subagent-driven-development`** — Primary implementation engine. Dispatches a fresh subagent per task with a two-stage review (spec compliance → code quality) after each task.
+- **`executing-plans`** — Alternative for batch execution with human-in-the-loop checkpoints. Good for a separate session.
+- **`dispatching-parallel-agents`** — Partition 2+ independent tasks and dispatch one subagent per domain concurrently.
+- **`finishing-a-development-branch`** — Verify tests, then present four merge/PR/keep/discard options. Cleans up the worktree.
 
-##  Quality & Verification
+## Quality & Verification
 
-Skills dedicated to maintaining high standards and preventing regressions.
+- **`test-driven-development`** — RED-GREEN-REFACTOR reference. In this workspace, the coding agent does NOT write tests directly — it dispatches the `test-engineer` via `requesting-test-creation` while following the TDD principles as guidance.
+- **`verification-before-completion`** — Mandatory evidence check before claiming a task is done. Run the verification command, read the output, THEN make the claim.
+- **`systematic-debugging`** — Four-phase root-cause process (Investigation → Pattern → Hypothesis → Implementation) so bugs don't get patched with symptom fixes.
 
-- **`test-driven-development`**: Enforces writing failing tests first (RED) and verifies behavior before implementation.
-- **`verification-before-completion`**: A mandatory check before claiming a task is done, requiring evidence of passing tests and functional correctness.
-- **`systematic-debugging`**: A rigorous approach to root-cause analysis and fixing bugs when tests fail or errors occur.
+## Inter-Agent Communication
 
-##  Inter-Agent Communication
+- **`requesting-code-review`** — Dispatches the `code-reviewer`. Provides the review template at `code-reviewer.md`.
+- **`requesting-test-creation`** — Dispatches the `test-engineer` in parallel as soon as interfaces are defined.
+- **`receiving-code-review`** — How the implementer processes review feedback (verify → evaluate → respond → implement; no performative agreement).
+- **`receiving-test-creation`** — How the implementer processes test results from the test-engineer.
 
-Skills that facilitate collaboration between specialized agents.
+## Infrastructure & Meta
 
-- **`requesting-code-review`**: Dispatches the `code-reviewer` agent to validate a completed changeset.
-- **`requesting-test-creation`**: Dispatches the `test-engineer` agent as soon as interfaces are defined.
-- **`receiving-code-review`**: Guides the implementation agent through addressing feedback from a code review.
-- **`receiving-test-creation`**: Handles the results and reports from the `test-engineer`.
+- **`using-git-worktrees`** — Create isolated worktrees with safety verification (`.gitignore`, baseline tests). Required before implementation starts.
+- **`update-docs`** — Keep root-level `docs/*.md` aligned with the codebase according to the contract in `update-docs/ROOT_DOCS.md`.
+- **`writing-skills`** — Meta-skill for creating new skills with TDD applied to documentation (pressure-test with subagents).
 
-##  Infrastructure & Workspace
+## How to Use a Skill
 
-- **`using-git-worktrees`**: Sets up isolated workspaces for each feature to prevent context pollution and ensure safety.
-- **`using-superpowers`**: The foundational skill for discovering and invoking other superpowers.
+1. Read the skill's `SKILL.md` end-to-end before starting the work it describes.
+2. Follow the skill's own process — flowcharts, checklists, and red flags are there for a reason.
+3. If the skill references another skill as a required sub-skill, read that one first too.
+4. Skills are reference guides, not checklists to blindly tick off. When the skill explicitly says "stop and ask", stop and ask.

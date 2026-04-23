@@ -1,56 +1,83 @@
 # superpowers-extended
 
-Welcome to **superpowers-extended**. This workspace provides a highly structured, AI-driven development framework designed for professional software engineering. It builds upon the "superpowers" philosophy, emphasizing Test-Driven Development (TDD), specialized AI roles, and rigorous review cycles to deliver high-quality code.
+**superpowers-extended** is a portable extension pack for AI-assisted coding agents. It layers specialized roles (code reviewer, test engineer), structured skills, and multi-phase workflows on top of any repository so AI-driven development stays rigorous, test-first, and review-gated.
 
 ## Core Principles
 
-- **Eliminating Confirmation Bias**: By separating the Test Engineer from the Implementer, we prevent the "grading their own homework" effect where an AI agent writes tests that only confirm its own assumptions.
-- **Independent Test-Driven Development (TDD)**: No production code is written until an independent test agent has created a failing test (RED).
-- **Isolated Workspaces**: Safe development using git worktrees to prevent context pollution.
-- **Bite-Sized Tasks**: Granular, testable implementation plans that ensure constant verification.
+- **Eliminate confirmation bias.** The implementer never writes the tests; a dedicated `test-engineer` agent does. No "grading your own homework."
+- **Independent TDD.** No production code ships without a failing test written first (RED-GREEN-REFACTOR).
+- **Isolated workspaces.** Feature work happens in a git worktree, never on the main branch.
+- **Bite-sized tasks.** Plans are broken into 2–5 minute verifiable steps.
+- **Two-stage review.** Every task gets a spec-compliance review followed by a code-quality review.
 
-## Platform Usage Guides
+## Supported Platforms
 
-**superpowers-extended** is designed to work seamlessly across different AI-assisted development environments. Each platform interacts with the `.agents` folder to provide structured capabilities.
+superpowers-extended is multi-platform by design. The framework lives in two mirrored trees plus a shared `workflows/` directory:
+
+| Platform | Entry point | Agents | Skills | Slash commands |
+|---|---|---|---|---|
+| **Claude Code** | `CLAUDE.md` | `.claude/agents/` | `.claude/skills/` | `.claude/commands/` |
+| **Codex / Cursor / Aider** | `AGENTS.md` | `.agents/agents/` | `.agents/skills/` | `workflows/` (read manually) |
+| **Gemini CLI** | `AGENTS.md` | `.agents/agents/` | `.agents/skills/` | `workflows/` |
+
+Each tool reads the tree it expects. The two trees mirror each other — keep them in sync when you customize.
 
 ### Claude Code
 
-When using Claude Code, **superpowers-extended** acts as a set of structured instructions and tools provided by the `.claude` directory.
+- Claude Code auto-discovers `.claude/skills/` and `.claude/agents/` and exposes `.claude/commands/` as slash commands.
+- Start a feature with `/full_cycle`, or break it up with `/plan` → `/execute` / `/execute_parallel`. For small changes use `/quick`.
+- Dispatch specialized agents with the Agent tool using `subagent_type: code-reviewer` or `subagent_type: test-engineer`.
 
-- **Workflow Initiation**: Ask Claude to "Follow the development cycle in `.agents/workflows/development_cycle.md`" to begin a feature.
-- **Skill Execution**: Claude will automatically use the `Skill` tool to read and follow the instructions in the `.claude/skills/` directory.
-- **Agent Dispatch**: Claude can "delegate" tasks to himself by adopting the personas defined in `.claude/agents/` for specialized roles.
+### Codex / Cursor / Aider
 
-### Codex (GitHub Copilot / Cursor)
-
-For IDE-based AI assistants like GitHub Copilot (Codex) or Cursor, **superpowers-extended** serves as a rigorous project-level documentation and instruction set.
-
-- **Context Loading**: Add `.agents/`, and their subdirectories to your IDE's context (e.g., via `@workspace` or `README` context).
-- **Execution**: Direct the AI to "Execute the current task from the implementation plan in `docs/plans/` using the `test-driven-development` skill in `.agents/skills/test-driven-development/SKILL.md`."
-- **Verification**: Use the instructions in `docs/development_cycle.md` as a checklist for your development progress.
+- Add `AGENTS.md`, `.agents/`, and `workflows/` to the editor's context.
+- Ask the agent to "follow the workflow in `workflows/full_cycle.md`" or "use the skill at `.agents/skills/<name>/SKILL.md`".
+- Role boundaries (implementer never writes tests, test-engineer never writes production code) are enforced by the documents themselves — reference them explicitly.
 
 ### Gemini CLI
 
-In the Gemini CLI, **superpowers-extended** is fully integrated as a native extension.
-
-- **Primary Command**: Use `/development_cycle` to start the full 6-phase development workflow.
-- **Manual Skills**: You can invoke specific skills by name (e.g., `brainstorming`, `writing-plans`) to perform targeted tasks.
-- **Sub-Agents**: Use the `code-reviewer` or `test-engineer` agents when prompted or as part of the implementation cycle.
+- `workflows/*.md` files carry frontmatter `description: ...` and surface as slash commands (`/full_cycle`, `/plan`, `/execute`, `/execute_parallel`, `/quick`).
+- Skills are invoked by name (`brainstorming`, `writing-plans`, …) after reading the matching `SKILL.md`.
 
 ## Repository Structure
 
-- `.agents/agents/`: Definitions for specialized AI roles.
-- `.agents/skills/`: The "superpowers" (skills) that extend Gemini CLI capabilities.
-- `.agents/workflows/`: Structured, multi-step development procedures.
-- `.claude/agents/`: Definitions for specialized AI roles for Claude Code.
-- `.claude/skills/`: The "superpowers" (skills) formatted for Claude Code.
-- `docs/`: Detailed documentation and implementation plans.
+```
+.agents/
+  agents/        # Agent personas (code-reviewer, test-engineer) — Codex / Gemini
+  skills/        # Skills — Codex / Gemini
+.claude/
+  agents/        # Agent personas — Claude Code mirror
+  skills/        # Skills — Claude Code mirror (with Claude-Code-specific tool names)
+  commands/      # Slash-command copies of the workflow files
+workflows/       # Workflow definitions (rendered as slash commands by supporting tools)
+docs/            # Human-facing documentation
+CLAUDE.md        # Entry point for Claude Code
+AGENTS.md        # Entry point for Codex / Cursor / Gemini CLI / other AGENTS.md-aware tools
+INIT-SUPERPOWERS-EXTENDED.md  # Initialization guide for dropping the pack into a new repo
+```
 
 ## Getting Started
 
-To explore the development cycle and understand how to build features in this workspace, refer to:
+### Using the pack in this repository
 
-- **[Development Cycle Guide](./docs/development_cycle.md)**: A step-by-step walkthrough of the 6-phase development process.
-- **[Specialized Agents](./docs/agents.md)**: Learn about the roles of the Code Reviewer and Test Engineer.
-- **[Superpowers (Skills)](./docs/skills.md)**: A comprehensive list of the skills available in this workspace.
-- **[Workflows](./docs/workflows.md)**: An overview of the high-level orchestration layers.
+- **[Development Cycle Guide](./docs/development_cycle.md)** — Step-by-step walkthrough of the 6-phase process.
+- **[Specialized Agents](./docs/agents.md)** — Roles of the `code-reviewer` and `test-engineer`.
+- **[Superpowers (Skills)](./docs/skills.md)** — Catalog of every skill and when to use it.
+- **[Workflows](./docs/workflows.md)** — `/full_cycle`, `/plan`, `/execute`, `/execute_parallel`, `/quick`.
+
+### Installing the pack in a new repository
+
+superpowers-extended is designed to be copied into other repositories as an extension pack. To install:
+
+1. Copy this repo's contents into the target repository (`.agents/`, `.claude/`, `workflows/`, `docs/`, `CLAUDE.md`, `AGENTS.md`, `INIT-SUPERPOWERS-EXTENDED.md`, `README.md`, `LICENSE`).
+2. Commit the untouched import so later diffs show only your customizations.
+3. Open **[`INIT-SUPERPOWERS-EXTENDED.md`](./INIT-SUPERPOWERS-EXTENDED.md)** and follow it end-to-end. It enumerates every placeholder (`<PLAN_PATH_PATTERN>`, `<BASELINE_VERIFICATION_COMMAND>`, `<TEST_FRAMEWORK_AND_COMMANDS>`, etc.) and the files that reference them.
+4. Rewrite `.claude/skills/update-docs/ROOT_DOCS.md` and `.agents/skills/update-docs/ROOT_DOCS.md` to describe your real root docs.
+5. Delete any skills or workflows the target repo will not use.
+6. Run the validation commands at the end of `INIT-SUPERPOWERS-EXTENDED.md` to confirm no placeholders remain.
+
+Once initialized, your agents (Claude Code, Codex, Gemini CLI, …) will have a consistent set of specialized roles, skills, and workflows with repo-specific verification and test commands already wired in.
+
+## License
+
+See [LICENSE](./LICENSE).
