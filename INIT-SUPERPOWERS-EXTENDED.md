@@ -105,14 +105,10 @@ After initialization, these commands should be clean:
 # 1. No placeholders left anywhere (except this file, which documents them)
 rg -n "<[A-Z_]+>" .agents .claude workflows docs CLAUDE.md AGENTS.md README.md
 
-# 2. No leftover references to the original authoring repo
-rg -n "vod_to_text|Nova|ops/gcp|YouTube|Twitch|yt-dlp|faster-whisper" .agents .claude workflows
-
-# 3. Review drift between the two trees (expect only platform-specific wording)
+# 2. Review drift between the two trees (expect only platform-specific wording)
 diff -ru .agents/skills .claude/skills
 diff -ru .agents/agents .claude/agents
 ```
 
 Command 1 should return only this file (or nothing if you deleted the placeholder table after init).
-Command 2 should return nothing.
-Command 3 is for human review — the `.claude/` tree intentionally rewords a few platform references (`superpowers:<skill>` → the bare skill name, `Task tool` → `Agent tool`). Everything else should be identical; if you see unexplained drift, re-sync.
+Command 2 is for human review — the `.claude/` tree intentionally rewords a few platform references (`superpowers:<skill>` → the bare skill name, `Task tool` → `Agent tool`). Everything else should be identical; if you see unexplained drift, re-sync.
