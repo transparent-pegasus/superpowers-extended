@@ -5,13 +5,18 @@ description: Use when implementing any feature or bugfix, before writing impleme
 
 # Test-Driven Development (TDD)
 
-## Overview
+## Fork Reconciliation: Role Boundaries (READ FIRST)
 
-> [!CAUTION]
-> **本プロジェクトでの特殊ルール:**
-> コーディングエージェント（あなた）は直接テストを書いてはいけません。
-> テストの作成はすべて `test-engineer` サブエージェントに委譲します。（`requesting-test-creation` スキルを使用）
-> 下記の TDD の原則は、`test-engineer` がどのようにテストを作成するかの「参照情報」として機能します。
+This fork enforces a strict role split that overrides any "you write the test" phrasing later in this document:
+
+- The **implementer never writes tests.** Period.
+- The **`test-engineer`** named subagent is the **sole** entity permitted to author test code, and owns the RED-GREEN-REFACTOR cycle on behalf of the implementer.
+- To request a test, the implementer invokes the `requesting-test-creation` skill, which dispatches the `test-engineer` agent.
+- To incorporate test results, the implementer invokes the `receiving-test-creation` skill.
+
+Wherever the rest of this document says "write a failing test" or "verify RED/GREEN," read that as "request the `test-engineer` to write the failing test via `requesting-test-creation` and receive the result via `receiving-test-creation`." The Iron Law below still binds the implementer: no production code without a failing test first — produced by the `test-engineer`, not by the implementer.
+
+## Overview
 
 Write the test first. Watch it fail. Write minimal code to pass.
 
@@ -334,8 +339,9 @@ Extract validation for multiple fields if needed.
 
 Before marking work complete:
 
-- [ ] Every new function/method has a test
-- [ ] Watched each test fail before implementing
+- [ ] Every new function/method has a test authored by the `test-engineer` agent
+- [ ] Tests were requested through the `requesting-test-creation` skill, not written by the implementer
+- [ ] Watched each test fail before implementing (RED, confirmed via `receiving-test-creation`)
 - [ ] Each test failed for expected reason (feature missing, not typo)
 - [ ] Wrote minimal code to pass each test
 - [ ] All tests pass
@@ -343,7 +349,7 @@ Before marking work complete:
 - [ ] Tests use real code (mocks only if unavoidable)
 - [ ] Edge cases and errors covered
 
-Can't check all boxes? You skipped TDD. Start over.
+Can't check all boxes? You skipped TDD. Start over — and route tests through the `test-engineer` this time.
 
 ## When Stuck
 
