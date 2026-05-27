@@ -13,12 +13,12 @@ The two trees mirror each other. Edit both when adding or changing a skill.
 
 ## Strategic & Planning
 
-- **`brainstorming`** — Turn an idea into an approved design through one-question-at-a-time dialogue. Writes the design to `<DESIGN_DOC_PATH_PATTERN>` (do not commit). Terminal state is invoking `writing-plans`.
-- **`writing-plans`** — Break the approved design into bite-sized, TDD-shaped tasks. Writes the plan to `<PLAN_PATH_PATTERN>` (do not commit). Offers `subagent-driven-development` or `executing-plans` as next step.
+- **`brainstorming`** — Turn an idea into an approved design through one-question-at-a-time dialogue. Writes the design to `<DESIGN_DOC_PATH_PATTERN>` (do not commit). Terminal state is invoking `writing-plans`. Includes an optional **visual companion** (browser-based Node.js server in `brainstorming/scripts/` and `brainstorming/visual-companion.md`) for mockups, diagrams, and visual comparisons. Inline spec self-review (placeholder/consistency/scope/ambiguity) runs before the user-review gate.
+- **`writing-plans`** — Break the approved design into bite-sized, TDD-shaped tasks. Writes the plan to `<PLAN_PATH_PATTERN>` (do not commit). Includes a File Structure section, Scope Check, "No Placeholders" guardrails, and inline self-review. Offers `subagent-driven-development` or `executing-plans` as co-equal next steps.
 
 ## Operational & Execution
 
-- **`subagent-driven-development`** — Primary implementation engine. Dispatches a fresh subagent per task with a two-stage review (spec compliance → code quality) after each task.
+- **`subagent-driven-development`** — Primary implementation engine. Dispatches a fresh subagent per task with a two-stage review (spec compliance → code quality) after each task. Implementer status protocol: `DONE / DONE_WITH_CONCERNS / BLOCKED / NEEDS_CONTEXT`. Reviewers are dispatched as the named `code-reviewer` agent (not `general-purpose`). Includes model-selection guidance and "in over your head" escalation.
 - **`executing-plans`** — Alternative for batch execution with human-in-the-loop checkpoints. Good for a separate session.
 - **`dispatching-parallel-agents`** — Partition 2+ independent tasks and dispatch one subagent per domain concurrently.
 - **`finishing-a-development-branch`** — Verify tests, then present four merge/PR/keep/discard options. Cleans up the worktree.
@@ -38,9 +38,9 @@ The two trees mirror each other. Edit both when adding or changing a skill.
 
 ## Infrastructure & Meta
 
-- **`using-git-worktrees`** — Create isolated worktrees with safety verification (`.gitignore`, baseline tests). Required before implementation starts.
+- **`using-git-worktrees`** — Create isolated worktrees with safety verification (`.gitignore`, baseline tests). Detects existing isolation (`GIT_DIR != GIT_COMMON`), prefers harness-native worktree tools, asks consent before creating. Required before implementation starts.
 - **`update-docs`** — Keep root-level `docs/*.md` aligned with the codebase according to the contract in `update-docs/ROOT_DOCS.md`.
-- **`writing-skills`** — Meta-skill for creating new skills with TDD applied to documentation (pressure-test with subagents).
+- **`writing-skills`** — Meta-skill for creating new skills with TDD applied to documentation (pressure-test with subagents). Bundles `examples/` for reference SKILL patterns.
 
 ## How to Use a Skill
 

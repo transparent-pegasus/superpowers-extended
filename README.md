@@ -9,6 +9,9 @@
 - **Isolated workspaces.** Feature work happens in a git worktree, never on the main branch.
 - **Bite-sized tasks.** Plans are broken into 2–5 minute verifiable steps.
 - **Two-stage review.** Every task gets a spec-compliance review followed by a code-quality review.
+- **Visual brainstorming companion (optional).** Browser-based mockups, diagrams, and visual comparisons alongside terminal conversation when a question is better seen than read.
+
+Tracks upstream [obra/superpowers](https://github.com/obra/superpowers) — currently synced to v5.1.0.
 
 ## Supported Platforms
 
