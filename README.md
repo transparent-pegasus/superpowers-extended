@@ -72,7 +72,7 @@ INIT-SUPERPOWERS-EXTENDED.md  # Initialization guide for dropping the pack into 
 
 superpowers-extended is designed to be copied into other repositories as an extension pack. To install:
 
-1. Copy this repo's contents into the target repository (`.agents/`, `.claude/`, `workflows/`, `docs/`, `CLAUDE.md`, `AGENTS.md`, `INIT-SUPERPOWERS-EXTENDED.md`, `README.md`, `LICENSE`).
+1. Copy this repo's contents into the target repository (`.agents/`, `.claude/`, `workflows/`, `docs/`, `changelogs/`, `CLAUDE.md`, `AGENTS.md`, `INIT-SUPERPOWERS-EXTENDED.md`, `UPDATE-SUPERPOWERS-EXTENDED.md`, `README.md`, `LICENSE`).
 2. Commit the untouched import so later diffs show only your customizations.
 3. Open **[`INIT-SUPERPOWERS-EXTENDED.md`](./INIT-SUPERPOWERS-EXTENDED.md)** and follow it end-to-end. It enumerates every placeholder (`<PLAN_PATH_PATTERN>`, `<BASELINE_VERIFICATION_COMMAND>`, `<TEST_FRAMEWORK_AND_COMMANDS>`, etc.) and the files that reference them.
 4. Rewrite `.claude/skills/update-docs/ROOT_DOCS.md` and `.agents/skills/update-docs/ROOT_DOCS.md` to describe your real root docs.
@@ -80,6 +80,14 @@ superpowers-extended is designed to be copied into other repositories as an exte
 6. Run the validation commands at the end of `INIT-SUPERPOWERS-EXTENDED.md` to confirm no placeholders remain.
 
 Once initialized, your agents (Claude Code, Codex, Gemini CLI, …) will have a consistent set of specialized roles, skills, and workflows with repo-specific verification and test commands already wired in.
+
+### Updating an existing installation
+
+When a newer version of superpowers-extended is published, follow **[`UPDATE-SUPERPOWERS-EXTENDED.md`](./UPDATE-SUPERPOWERS-EXTENDED.md)**. It walks you through a diff-driven cherry-pick of each unseen entry in `changelogs/`, with explicit handling for your filled placeholders and local customizations.
+
+## Changelog
+
+Each upstream-tracking refresh is recorded in [`changelogs/`](./changelogs/) as a self-contained entry: YAML metadata (upstream version + SHA, our commit range), summary, reconciliation decisions, and the full unified diff. The current upstream sync point is in [`changelogs/UPSTREAM_SHA`](./changelogs/UPSTREAM_SHA).
 
 ## License
 

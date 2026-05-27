@@ -112,3 +112,19 @@ diff -ru .agents/agents .claude/agents
 
 Command 1 should return only this file (or nothing if you deleted the placeholder table after init).
 Command 2 is for human review — the `.claude/` tree intentionally rewords a few platform references (`superpowers:<skill>` → the bare skill name, `Task tool` → `Agent tool`). Everything else should be identical; if you see unexplained drift, re-sync.
+
+## After Installation: Staying Current
+
+Future updates to superpowers-extended are recorded as individual entries in `changelogs/`. To apply a newer version on top of your filled-in installation, follow [`UPDATE-SUPERPOWERS-EXTENDED.md`](./UPDATE-SUPERPOWERS-EXTENDED.md). Your current sync point is stored in `changelogs/UPSTREAM_SHA`.
+
+## Maintaining this Pack (for pack maintainers, not consumers)
+
+If you maintain superpowers-extended itself (i.e., you periodically resync from `obra/superpowers`), each refresh MUST capture a new changelog entry. After merging an upstream-refresh branch:
+
+1. Determine the commit range that landed (e.g. `git diff <before>..<after>`).
+2. Look up the upstream commit SHA you synced against (`cd /tmp/<upstream-clone> && git rev-parse HEAD`).
+3. Create `changelogs/YYYY-MM-DD-upstream-vX.Y.Z.md` with the YAML frontmatter (`upstream_repo`, `upstream_version`, `upstream_sha`, `previous_upstream_sha` from the prior entry, `ours_from_sha`, `ours_to_sha`), a summary, the upstream coverage list, reconciliation decisions, and the full unified diff inside a ` ```diff ` block.
+4. Update `changelogs/UPSTREAM_SHA` to the new upstream SHA.
+5. Commit both alongside the refresh.
+
+This pattern is what downstream consumers rely on when they follow `UPDATE-SUPERPOWERS-EXTENDED.md`.
