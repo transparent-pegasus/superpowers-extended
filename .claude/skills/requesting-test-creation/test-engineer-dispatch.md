@@ -1,6 +1,14 @@
 # Test Creation Request Template
 
-Use this template to dispatch a test-engineer subagent.
+Use this template when dispatching the `test-engineer` subagent.
+
+**Purpose:** Author tests against a known interface or completed logic. The implementer never writes tests themselves — they request, the test-engineer authors.
+
+```
+Agent tool (subagent_type: test-engineer):
+  description: "Author tests for {WHAT_TO_TEST}"
+  prompt: (use the template body below)
+```
 
 **Your task:**
 1. Review {WHAT_TO_TEST} implementation or interface.

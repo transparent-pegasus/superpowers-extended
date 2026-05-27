@@ -5,9 +5,11 @@ description: Use when interfaces or types have been defined (in parallel with im
 
 # Requesting Test Creation
 
-Dispatch the `test-engineer` subagent to write automated tests for implementation code.
+Dispatch the `test-engineer` subagent to write automated tests for implementation code. The reviewer gets precisely crafted context — never your session's history. This keeps the test-engineer focused on the public contract, not your implementation thought process.
 
 **Core principle:** Test creation runs in **parallel** with implementation whenever possible. Do not wait for implementation to finish before requesting tests if the API/interface is defined.
+
+**Announce at start:** "I'm using the requesting-test-creation skill to dispatch the test-engineer."
 
 ## When to Request Test Creation
 
@@ -23,7 +25,7 @@ Understand the interfaces, function signatures, or completed logic that the test
 
 **2. Dispatch test-engineer subagent:**
 
-Use the available agent-dispatch tooling and fill the template at `test-engineer-dispatch.md`.
+Use the Agent tool with `subagent_type: test-engineer`, filling in the template at `test-engineer-dispatch.md`.
 
 **Placeholders:**
 - `{WHAT_TO_TEST}` - The feature, CLI surface, or function that requires tests

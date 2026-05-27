@@ -11,6 +11,8 @@ Process test results rigorously. Test failures dictate the next steps in develop
 
 **Core principle:** Tests define correctness. Bug reports from the test-engineer must be verified and fixed before proceeding.
 
+**Announce at start:** "I'm using the receiving-test-creation skill to process the test-engineer's report."
+
 ## The Response Pattern
 
 ```
