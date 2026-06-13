@@ -28,7 +28,7 @@ superpowers-extended is multi-platform by design. The framework lives in two mir
 |---|---|---|---|---|
 | **Claude Code** | `CLAUDE.md` | `.claude/agents/` | `.claude/skills/` | `.claude/commands/` |
 | **Codex / Cursor / Aider** | `AGENTS.md` | `.agents/agents/` | `.agents/skills/` | `workflows/` (read manually) |
-| **Gemini CLI** | `AGENTS.md` | `.agents/agents/` | `.agents/skills/` | `workflows/` |
+| **Antigravity CLI** | `AGENTS.md` | `.agents/agents/` | `.agents/skills/` | `workflows/` (read manually or adapt as custom commands) |
 
 Each tool reads the tree it expects. The two trees mirror each other — keep them in sync when you customize.
 
@@ -44,17 +44,19 @@ Each tool reads the tree it expects. The two trees mirror each other — keep th
 - Ask the agent to "follow the workflow in `workflows/full_cycle.md`" or "use the skill at `.agents/skills/<name>/SKILL.md`".
 - Role boundaries (implementer never writes tests, test-engineer never writes production code) are enforced by the documents themselves — reference them explicitly.
 
-### Gemini CLI
+### Antigravity CLI
 
-- `workflows/*.md` files carry frontmatter `description: ...` and surface as slash commands (`/full_cycle`, `/plan`, `/execute`, `/execute_parallel`, `/quick`).
+- Antigravity CLI is Google's terminal interface for Antigravity. Google says it supports key workflow features for this pack: Agent Skills, Hooks, Subagents, and Extensions, now represented as Antigravity plugins.
+- Add `AGENTS.md`, `.agents/`, and `workflows/` to the workspace context.
 - Skills are invoked by name (`brainstorming`, `writing-plans`, …) after reading the matching `SKILL.md`.
+- Use `workflows/*.md` directly, or adapt them as Antigravity custom commands if your setup supports command registration.
 
 ## Repository Structure
 
 ```
 .agents/
-  agents/        # Agent personas (code-reviewer, test-engineer) — Codex / Gemini
-  skills/        # Skills — Codex / Gemini
+  agents/        # Agent personas (code-reviewer, test-engineer) — Codex / Antigravity CLI
+  skills/        # Skills — Codex / Antigravity CLI
 .claude/
   agents/        # Agent personas — Claude Code mirror
   skills/        # Skills — Claude Code mirror (with Claude-Code-specific tool names)
@@ -62,7 +64,7 @@ Each tool reads the tree it expects. The two trees mirror each other — keep th
 workflows/       # Workflow definitions (rendered as slash commands by supporting tools)
 docs/            # Human-facing documentation
 CLAUDE.md        # Entry point for Claude Code
-AGENTS.md        # Entry point for Codex / Cursor / Gemini CLI / other AGENTS.md-aware tools
+AGENTS.md        # Entry point for Codex / Cursor / Antigravity CLI / other AGENTS.md-aware tools
 INIT-SUPERPOWERS-EXTENDED.md  # Initialization guide for dropping the pack into a new repo
 ```
 
@@ -86,7 +88,7 @@ superpowers-extended is designed to be copied into other repositories as an exte
 5. Delete any skills or workflows the target repo will not use.
 6. Run the validation commands at the end of `INIT-SUPERPOWERS-EXTENDED.md` to confirm no placeholders remain.
 
-Once initialized, your agents (Claude Code, Codex, Gemini CLI, …) will have a consistent set of specialized roles, skills, and workflows with repo-specific verification and test commands already wired in.
+Once initialized, your agents (Claude Code, Codex, Antigravity CLI, …) will have a consistent set of specialized roles, skills, and workflows with repo-specific verification and test commands already wired in.
 
 ### Updating an existing installation
 
