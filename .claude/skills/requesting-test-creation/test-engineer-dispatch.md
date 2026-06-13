@@ -12,11 +12,12 @@ Agent tool (subagent_type: test-engineer):
 
 **Your task:**
 1. Review {WHAT_TO_TEST} implementation or interface.
-2. Read the behavior expectations from {PLAN_OR_REQUIREMENTS}.
-3. Create automated tests matching {INTERFACES_OR_TYPES}.
-4. Follow TDD: Tests must initially fail if implementation is incomplete (RED).
-5. Ensure tests check real behavior, edge cases, and error states without relying on live network, cloud, container, hardware, or paid third-party dependencies unless explicitly requested.
-6. Verify tests pass (GREEN) if implementation is already complete.
+2. If a codegraph plugin/tool is available, search nearby tests, related symbols, and callers/callees before choosing test locations. If unavailable, use ordinary repo search and file reads.
+3. Read the behavior expectations from {PLAN_OR_REQUIREMENTS}.
+4. Create automated tests matching {INTERFACES_OR_TYPES}.
+5. Follow TDD: Tests must initially fail if implementation is incomplete (RED).
+6. Ensure tests check real behavior, edge cases, and error states without relying on live network, cloud, container, hardware, or paid third-party dependencies unless explicitly requested.
+7. Verify tests pass (GREEN) if implementation is already complete.
 
 ## Target
 

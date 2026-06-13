@@ -30,6 +30,14 @@ Agent tool (subagent_type: code-reviewer):
     git diff {BASE_SHA}..{HEAD_SHA}
     ```
 
+    ## Scope Discovery
+
+    Before reviewing, do not limit yourself to changed files. If a codegraph
+    plugin/tool is available, use codegraph search plus callers/callees/impact
+    to identify related files, symbols, and downstream surfaces touched by the
+    diff. If unavailable, use `rg`, file reads, and manual dependency tracing.
+    Review only evidence you actually inspect.
+
     ## What to Check
 
     **Plan alignment:**

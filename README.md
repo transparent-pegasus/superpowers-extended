@@ -10,8 +10,15 @@
 - **Bite-sized tasks.** Plans are broken into 2–5 minute verifiable steps.
 - **Two-stage review.** Every task gets a spec-compliance review followed by a code-quality review.
 - **Visual brainstorming companion (optional).** Browser-based mockups, diagrams, and visual comparisons alongside terminal conversation when a question is better seen than read.
+- **Codegraph-assisted discovery (optional).** When a codegraph plugin/tool is available, skills use it to find related files, symbols, callers, callees, and impact surfaces before planning, editing, debugging, testing, or reviewing.
 
-Tracks upstream [obra/superpowers](https://github.com/obra/superpowers) — currently synced to v5.1.0.
+Tracks upstream [obra/superpowers](https://github.com/obra/superpowers) — currently synced to v5.1.0 plus post-release commit `6fd4507`.
+
+## Optional Codegraph Integration
+
+The codegraph integration is opportunistic. The skills activate codegraph-specific discovery rules only when a codegraph plugin or equivalent tool is available in the current agent environment. If it is not available, agents continue with the normal fallback path: `rg`, file reads, stack traces, diffs, recent commits, and manual dependency tracing.
+
+When available, codegraph is used during brainstorming context discovery, implementation-plan file selection, plan review before execution, root-cause tracing, test-location discovery, code review scope discovery, review-feedback verification, and subagent implementation/spec-review prompts.
 
 ## Supported Platforms
 
@@ -85,9 +92,15 @@ Once initialized, your agents (Claude Code, Codex, Gemini CLI, …) will have a 
 
 When a newer version of superpowers-extended is published, follow **[`UPDATE-SUPERPOWERS-EXTENDED.md`](./UPDATE-SUPERPOWERS-EXTENDED.md)**. It walks you through a diff-driven cherry-pick of each unseen entry in `changelogs/`, with explicit handling for your filled placeholders and local customizations.
 
+## Contributing
+
+This repository includes GitHub issue and pull-request templates under [`.github/`](./.github/) that require disclosure of the authoring environment: model, harness, harness version, installed plugins, and human review status. If an agent produced a contribution, say so plainly. If a human wrote it by hand without agent assistance, say that instead.
+
+The `.github/` templates are for contributing to this pack. Downstream repositories should copy them only if they want the same contributor-disclosure policy.
+
 ## Changelog
 
-Each upstream-tracking refresh is recorded in [`changelogs/`](./changelogs/) as a self-contained entry: YAML metadata (upstream version + SHA, our commit range), summary, reconciliation decisions, and the full unified diff. The current upstream sync point is in [`changelogs/UPSTREAM_SHA`](./changelogs/UPSTREAM_SHA).
+Each upstream-tracking refresh is recorded in [`changelogs/`](./changelogs/) as a self-contained entry: YAML metadata (upstream version + SHA, our commit range when available), summary, reconciliation decisions, and verification notes. The current upstream sync point is in [`changelogs/UPSTREAM_SHA`](./changelogs/UPSTREAM_SHA).
 
 ## License
 

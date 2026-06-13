@@ -24,6 +24,11 @@ WHEN receiving code review feedback:
 6. IMPLEMENT: One item at a time, test each
 ```
 
+**Codegraph is optional:** If a codegraph plugin/tool is available, use search,
+callers, callees, and impact queries while verifying review feedback. If it is
+unavailable, use ordinary repo search and file reads; do not accept or reject
+feedback based on unavailable tooling.
+
 ## Forbidden Responses
 
 **NEVER:**

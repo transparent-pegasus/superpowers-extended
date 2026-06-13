@@ -22,6 +22,13 @@ Assume they are a skilled developer, but know almost nothing about our toolset o
 
 If the spec covers multiple independent subsystems, it should have been broken into sub-project specs during brainstorming. If it wasn't, suggest breaking this into separate plans — one per subsystem. Each plan should produce working, testable software on its own.
 
+## Repository Discovery
+
+Before choosing files, discover the current code shape.
+
+- If a codegraph plugin/tool is available, use it to search relevant files and symbols, then inspect callers, callees, and impact surface for the planned changes.
+- If codegraph is unavailable, continue with ordinary repo exploration (`rg`, file reads, recent commits). Codegraph is optional; do not block plan creation because it is missing.
+
 ## File Structure
 
 Before defining tasks, map out which files will be created or modified and what each one is responsible for. This is where decomposition decisions get locked in.

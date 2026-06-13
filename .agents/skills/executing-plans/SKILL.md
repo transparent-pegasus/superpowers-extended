@@ -17,9 +17,10 @@ Load plan, review critically, execute all tasks, report when complete.
 
 ### Step 1: Load and Review Plan
 1. Read plan file
-2. Review critically - identify any questions or concerns about the plan
-3. If concerns: Raise them with your human partner before starting
-4. If no concerns: Create TodoWrite and proceed
+2. If a codegraph plugin/tool is available, validate the plan's named files, symbols, dependencies, and likely impact surface with codegraph search/callers/callees/impact. If unavailable, validate with ordinary repo search and file reads.
+3. Review critically - identify any questions or concerns about the plan
+4. If concerns: Raise them with your human partner before starting
+5. If no concerns: Create TodoWrite and proceed
 
 ### Step 2: Execute Tasks
 

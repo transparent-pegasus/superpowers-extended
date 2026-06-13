@@ -26,6 +26,13 @@ Agent tool (subagent_type: general-purpose):
 
     **Ask them now.** Raise any concerns before starting work.
 
+    Before editing, discover the relevant code:
+    - If a codegraph plugin/tool is available, use it to search relevant files
+      and symbols, then inspect callers, callees, and impact surface for the
+      task.
+    - If codegraph is unavailable, use ordinary repo search and file reads. Do
+      not block on missing codegraph.
+
     ## Your Job
 
     Once you're clear on requirements:

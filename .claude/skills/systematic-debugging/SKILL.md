@@ -117,6 +117,7 @@ You MUST complete each phase before proceeding to the next.
    - Where does bad value originate?
    - What called this with bad value?
    - Keep tracing up until you find the source
+   - If codegraph tools are available, use callers/callees/impact queries to map execution paths and affected surfaces. If unavailable, trace with stack traces, `rg`, and manual file reads.
    - Fix at source, not at symptom
 
 ### Phase 2: Pattern Analysis

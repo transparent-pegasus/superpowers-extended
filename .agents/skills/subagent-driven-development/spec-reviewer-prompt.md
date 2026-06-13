@@ -33,6 +33,9 @@ Agent tool (subagent_type: code-reviewer):
     - Compare actual implementation to requirements line by line
     - Check for missing pieces they claimed to implement
     - Look for extra features they didn't mention
+    - If a codegraph plugin/tool is available, inspect related files, symbols,
+      callers/callees, and impact surface beyond changed files. If unavailable,
+      use ordinary repo search and file reads.
 
     ## Your Job
 
