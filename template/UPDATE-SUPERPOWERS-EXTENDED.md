@@ -6,14 +6,18 @@ If you have not installed superpowers-extended yet, use `INIT-SUPERPOWERS-EXTEND
 
 ## How it works
 
-This pack publishes each upstream refresh as a self-contained changelog entry in `changelogs/`. Each entry contains:
+This pack publishes each upstream refresh as a self-contained changelog entry in root `changelogs/`. Each entry contains:
 
 - A YAML frontmatter header with the upstream version, upstream commit SHA, and the commit range in this repo that the refresh produced.
 - A summary of what landed and what was deliberately skipped.
 - Reconciliation decisions (fork-specific rewrites — named-agent dispatch, placeholders, etc.).
 - A full unified diff of the changes that landed in this repo.
 
-You apply each unseen changelog entry **manually, hunk by hunk**, on top of your installation. There is no automated patcher because every consumer's installation diverges differently (filled placeholders, deleted skills, local customizations) — a blind `patch -p1` would corrupt those.
+You fetch the latest upstream changelog copy into `.superpowers-extended/changelogs/`, then apply each unseen entry **manually, hunk by hunk**, on top of your installation. There is no automated patcher because every consumer's installation diverges differently (filled placeholders, deleted skills, local customizations) — a blind `patch -p1` would corrupt those.
+
+Do not update an initialized target repository by copying `template/` over it wholesale. Use the changelog loop below instead, and merge entrypoint changes hunk by hunk.
+
+When a changelog diff path starts with `template/`, strip that prefix before applying it in the target repository. For example, source path `template/.agents/skills/brainstorming/SKILL.md` maps to target path `.agents/skills/brainstorming/SKILL.md`, and `template/UPDATE-SUPERPOWERS-EXTENDED.md` maps to `UPDATE-SUPERPOWERS-EXTENDED.md`. If a changelog touches `template/.superpowers-extended/entrypoints/AGENTS.md` or `template/.superpowers-extended/entrypoints/CLAUDE.md`, apply the relevant changes to the target repo's merged `AGENTS.md` or `CLAUDE.md`. Root `README.md`, `LICENSE`, and `changelogs/` paths stay at root.
 
 ## Preflight
 
@@ -30,25 +34,26 @@ cat changelogs/UPSTREAM_SHA 2>/dev/null || echo "absent"
 
 ### 2. Fetch the latest superpowers-extended
 
-Pull the latest `changelogs/` directory from the upstream superpowers-extended repository (the same source you used at install time):
+Pull the latest `changelogs/` directory from the upstream superpowers-extended repository into the standard target-repo cache:
 
 ```bash
-# Example: clone fresh into a comparison location
-git clone https://github.com/<your-source>/superpowers-extended.git /tmp/sp-latest
-ls /tmp/sp-latest/changelogs/
+node .superpowers-extended/scripts/fetch-latest-changelogs.js
+ls .superpowers-extended/changelogs/
 ```
+
+The helper defaults to `transparent-pegasus/superpowers-extended` on `main`. If you installed from a fork or another branch, pass `--owner`, `--repo`, or `--ref`.
 
 ### 3. Identify unseen entries
 
 ```bash
 # Your current sync point (or "none" if absent)
 LOCAL_SHA=$(cat changelogs/UPSTREAM_SHA 2>/dev/null || echo "none")
-LATEST_SHA=$(cat /tmp/sp-latest/changelogs/UPSTREAM_SHA)
+LATEST_SHA=$(cat .superpowers-extended/changelogs/UPSTREAM_SHA)
 echo "you are at: $LOCAL_SHA"
 echo "latest is:  $LATEST_SHA"
 
 # Listed in chronological order; sorted by filename (YYYY-MM-DD prefix)
-ls /tmp/sp-latest/changelogs/*.md
+ls .superpowers-extended/changelogs/*.md
 ```
 
 For each changelog entry whose `upstream_sha` you have **not** yet applied, you'll walk the cherry-pick loop below.
@@ -59,20 +64,22 @@ Repeat for each unseen changelog entry, oldest first:
 
 ### Step 1: Read the entry
 
-Open `changelogs/<date>-upstream-<version>.md`. Read the summary, the upstream coverage, and especially the reconciliation decisions. Those decisions are how the pack maintainer reconciled upstream against the fork model — they may or may not match your local customizations.
+Open `.superpowers-extended/changelogs/<date>-upstream-<version>.md`. Read the summary, the upstream coverage, and especially the reconciliation decisions. Those decisions are how the pack maintainer reconciled upstream against the fork model — they may or may not match your local customizations.
 
 ### Step 2: Walk the diff section by section
 
 Scroll to the ` ```diff ` block. The diff is grouped by file. For each file:
 
 1. **Does this file exist in your installation?**
+   - If the changelog path starts with `template/`, first strip `template/` to get the target path.
    - If you deleted it during INIT (step 5 lets consumers prune unused skills), **skip** the entire hunk.
    - If it exists, continue.
 
 2. **Have you customized this file?**
    - `git log --oneline -- <path>` against your installation to see whether you've touched it locally.
+   - Treat `AGENTS.md`, `CLAUDE.md`, and `README.md` as customized if they contain target-repo instructions, even if they have not been committed separately since installation.
    - If yes, switch to "Apply with adjustments" mode (Step 3 below).
-   - If no, you can copy the new file straight from `/tmp/sp-latest/<path>` over your local copy.
+   - If no, apply the changelog's diff hunk directly after previewing it.
 
 3. **Does the file contain filled placeholders?** Examples:
    - `<PLAN_PATH_PATTERN>` may have been replaced with your concrete path at INIT time.
@@ -81,12 +88,11 @@ Scroll to the ` ```diff ` block. The diff is grouped by file. For each file:
 
 ### Step 3: Apply with adjustments
 
-For files you customized or that contain filled placeholders, apply hunks by hand:
+For files you customized or that contain filled placeholders, apply hunks by hand from the changelog entry:
 
 ```bash
-# Open both side by side
-cp /tmp/sp-latest/<path> /tmp/proposed-<basename>
-diff -u <path> /tmp/proposed-<basename> | less
+# Open the unseen changelog entry and the target file side by side in your editor.
+# The changelog entry lives under .superpowers-extended/changelogs/.
 ```
 
 For each diff hunk, decide:
@@ -112,7 +118,7 @@ After applying everything from a single changelog entry, re-run the validation b
 
 ```bash
 # 1. No placeholders left anywhere (except docs that document them)
-rg -n "<[A-Z_]+>" .agents .claude workflows docs CLAUDE.md AGENTS.md README.md
+rg -n "<[A-Z_]+>" .agents .claude .superpowers-extended workflows CLAUDE.md AGENTS.md README.md
 
 # 2. Review drift between the two trees (expect only platform-specific wording)
 diff -ru .agents/skills .claude/skills
@@ -126,7 +132,7 @@ If something looks wrong, fix it before moving to the next changelog entry.
 Update your local `changelogs/UPSTREAM_SHA` to the applied entry's `upstream_sha` (from its frontmatter), and copy the changelog file itself into your installation's `changelogs/` directory so future updates know where you are:
 
 ```bash
-cp /tmp/sp-latest/changelogs/<date>-upstream-<version>.md changelogs/
+cp .superpowers-extended/changelogs/<date>-upstream-<version>.md changelogs/
 # Read the file's frontmatter and copy the upstream_sha value
 grep "^upstream_sha:" changelogs/<date>-upstream-<version>.md | awk '{print $2}' > changelogs/UPSTREAM_SHA
 ```
@@ -175,6 +181,7 @@ If you find a hunk you cannot reconcile (the upstream change fundamentally chang
 ## Reference
 
 - `INIT-SUPERPOWERS-EXTENDED.md` — first-install guide (placeholder substitution, customization, validation).
-- `changelogs/` — historical record of every upstream refresh applied to this pack.
-- `changelogs/UPSTREAM_SHA` — the current sync point.
+- `.superpowers-extended/changelogs/` — latest fetched copy of upstream changelog entries.
+- `changelogs/` — historical record of every upstream refresh applied to this installation.
+- `changelogs/UPSTREAM_SHA` — the applied sync point.
 - `README.md` — top-level overview and feature list.

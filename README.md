@@ -22,7 +22,7 @@ When available, codegraph is used during brainstorming context discovery, implem
 
 ## Supported Platforms
 
-superpowers-extended is multi-platform by design. The framework lives in two mirrored trees plus a shared `workflows/` directory:
+superpowers-extended is multi-platform by design. The installable framework payload lives under `template/` in this repository. After installation, those files sit at the target repository root as two mirrored trees plus a shared `workflows/` directory:
 
 | Platform | Entry point | Agents | Skills | Slash commands |
 |---|---|---|---|---|
@@ -54,45 +54,52 @@ Each tool reads the tree it expects. The two trees mirror each other — keep th
 ## Repository Structure
 
 ```
-.agents/
-  agents/        # Agent personas (code-reviewer, test-engineer) — Codex / Antigravity CLI
-  skills/        # Skills — Codex / Antigravity CLI
-.claude/
-  agents/        # Agent personas — Claude Code mirror
-  skills/        # Skills — Claude Code mirror (with Claude-Code-specific tool names)
-  commands/      # Slash-command copies of the workflow files
-workflows/       # Workflow definitions (rendered as slash commands by supporting tools)
-docs/            # Human-facing documentation
-CLAUDE.md        # Entry point for Claude Code
-AGENTS.md        # Entry point for Codex / Cursor / Antigravity CLI / other AGENTS.md-aware tools
-INIT-SUPERPOWERS-EXTENDED.md  # Initialization guide for dropping the pack into a new repo
+template/        # Files copied into the target repository root
+  .agents/       # Agent personas and skills for Codex / Antigravity CLI
+  .claude/       # Claude Code mirror, including slash-command copies
+  .superpowers-extended/
+    docs/        # Human-facing framework docs
+    scripts/     # Cross-platform install/update helper scripts
+    entrypoints/ # Source content to merge into target AGENTS.md / CLAUDE.md
+  workflows/     # Workflow definitions
+  INIT-SUPERPOWERS-EXTENDED.md
+  UPDATE-SUPERPOWERS-EXTENDED.md
+README.md        # Root README, copied alongside template/ contents
+LICENSE          # Root license, copied alongside template/ contents
+changelogs/      # Root applied upstream-refresh history and UPSTREAM_SHA
+AGENTS.md        # Maintainer pointer to template/.superpowers-extended/entrypoints/AGENTS.md
+CLAUDE.md        # Maintainer pointer to template/.superpowers-extended/entrypoints/CLAUDE.md
 ```
 
 ## Getting Started
 
 ### Using the pack in this repository
 
-- **[Development Cycle Guide](./docs/development_cycle.md)** — Step-by-step walkthrough of the 6-phase process.
-- **[Specialized Agents](./docs/agents.md)** — Roles of the `code-reviewer` and `test-engineer`.
-- **[Superpowers (Skills)](./docs/skills.md)** — Catalog of every skill and when to use it.
-- **[Workflows](./docs/workflows.md)** — `/full_cycle`, `/plan`, `/execute`, `/execute_parallel`, `/quick`.
+- **[Development Cycle Guide](./template/.superpowers-extended/docs/development_cycle.md)** — Step-by-step walkthrough of the 6-phase process.
+- **[Specialized Agents](./template/.superpowers-extended/docs/agents.md)** — Roles of the `code-reviewer` and `test-engineer`.
+- **[Superpowers (Skills)](./template/.superpowers-extended/docs/skills.md)** — Catalog of every skill and when to use it.
+- **[Workflows](./template/.superpowers-extended/docs/workflows.md)** — `/full_cycle`, `/plan`, `/execute`, `/execute_parallel`, `/quick`.
 
 ### Installing the pack in a new repository
 
 superpowers-extended is designed to be copied into other repositories as an extension pack. To install:
 
-1. Copy this repo's contents into the target repository (`.agents/`, `.claude/`, `workflows/`, `docs/`, `changelogs/`, `CLAUDE.md`, `AGENTS.md`, `INIT-SUPERPOWERS-EXTENDED.md`, `UPDATE-SUPERPOWERS-EXTENDED.md`, `README.md`, `LICENSE`).
-2. Commit the untouched import so later diffs show only your customizations.
-3. Open **[`INIT-SUPERPOWERS-EXTENDED.md`](./INIT-SUPERPOWERS-EXTENDED.md)** and follow it end-to-end. It enumerates every placeholder (`<PLAN_PATH_PATTERN>`, `<BASELINE_VERIFICATION_COMMAND>`, `<TEST_FRAMEWORK_AND_COMMANDS>`, etc.) and the files that reference them.
-4. Rewrite `.claude/skills/update-docs/ROOT_DOCS.md` and `.agents/skills/update-docs/ROOT_DOCS.md` to describe your real root docs.
-5. Delete any skills or workflows the target repo will not use.
-6. Run the validation commands at the end of `INIT-SUPERPOWERS-EXTENDED.md` to confirm no placeholders remain.
+1. Copy the contents of `template/` into the target repository root, including hidden directories such as `.agents/`, `.claude/`, and `.superpowers-extended/`. The template stores entrypoint source files under `.superpowers-extended/entrypoints/`, so this copy does not replace root `AGENTS.md` or `CLAUDE.md`.
+2. Merge `.superpowers-extended/entrypoints/AGENTS.md` into the target repo's `AGENTS.md`, or copy it to `AGENTS.md` if no such file exists.
+3. Merge `.superpowers-extended/entrypoints/CLAUDE.md` into the target repo's `CLAUDE.md`, or copy it to `CLAUDE.md` if no such file exists.
+4. Copy root `LICENSE` and root `changelogs/`; merge root `README.md` only after preserving target-specific content.
+5. Add `.superpowers-extended/changelogs/` to the target repository's `.gitignore`; it is an update-time cache, not applied history.
+6. Commit the untouched import so later diffs show only your customizations.
+7. Open **[`template/INIT-SUPERPOWERS-EXTENDED.md`](./template/INIT-SUPERPOWERS-EXTENDED.md)** and follow it end-to-end. In the target repo this file lives at `INIT-SUPERPOWERS-EXTENDED.md`. It enumerates every placeholder (`<PLAN_PATH_PATTERN>`, `<BASELINE_VERIFICATION_COMMAND>`, `<TEST_FRAMEWORK_AND_COMMANDS>`, etc.) and the files that reference them.
+8. Rewrite `.claude/skills/update-docs/ROOT_DOCS.md` and `.agents/skills/update-docs/ROOT_DOCS.md` to describe your real root docs.
+9. Delete any skills or workflows the target repo will not use.
+10. Run the validation commands at the end of `INIT-SUPERPOWERS-EXTENDED.md` to confirm no placeholders remain.
 
 Once initialized, your agents (Claude Code, Codex, Antigravity CLI, …) will have a consistent set of specialized roles, skills, and workflows with repo-specific verification and test commands already wired in.
 
 ### Updating an existing installation
 
-When a newer version of superpowers-extended is published, follow **[`UPDATE-SUPERPOWERS-EXTENDED.md`](./UPDATE-SUPERPOWERS-EXTENDED.md)**. It walks you through a diff-driven cherry-pick of each unseen entry in `changelogs/`, with explicit handling for your filled placeholders and local customizations.
+When a newer version of superpowers-extended is published, follow **[`template/UPDATE-SUPERPOWERS-EXTENDED.md`](./template/UPDATE-SUPERPOWERS-EXTENDED.md)**. In the target repo this file lives at `UPDATE-SUPERPOWERS-EXTENDED.md`. It fetches the latest changelog copy into `.superpowers-extended/changelogs/`, then walks you through a diff-driven cherry-pick of each unseen entry with explicit handling for `template/` path translation, filled placeholders, and local customizations.
 
 ## Contributing
 

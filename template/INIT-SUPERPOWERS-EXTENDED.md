@@ -1,10 +1,10 @@
 # INIT-SUPERPOWERS-EXTENDED
 
-This repository ships as a portable extension pack that layers specialized agents, skills, and workflows onto any project. Before using it in a real repository, replace the placeholders listed below, initialize the docs contract, and delete whatever you do not use.
+This repository ships as a portable extension pack that layers specialized agents, skills, and workflows onto any project. In the source repository, the installable payload lives under `template/`; root `README.md`, `LICENSE`, and `changelogs/` are copied alongside that payload. Before using it in a real repository, replace the placeholders listed below, initialize the docs contract, and delete whatever you do not use.
 
 ## What You Get
 
-After dropping the pack into a target repository, you have:
+After copying the pack into a target repository, you have:
 
 | Path | Purpose |
 |---|---|
@@ -14,20 +14,28 @@ After dropping the pack into a target repository, you have:
 | `.claude/skills/` | Skills for Claude Code (mirror of `.agents/skills/`) |
 | `.claude/commands/` | Claude Code slash-command copies of the workflow files |
 | `workflows/` | Workflow definitions (rendered as slash commands by supporting tools) |
-| `docs/` | Root docs explaining the framework to humans |
-| `CLAUDE.md` | Claude Code entry point |
-| `AGENTS.md` | Entry point for Codex / Cursor / Gemini CLI / other `AGENTS.md`-aware tools |
+| `.superpowers-extended/docs/` | Human-facing framework docs |
+| `.superpowers-extended/scripts/` | Cross-platform helper scripts used by install/update docs |
+| `.superpowers-extended/entrypoints/` | Source content to merge into root instruction files |
+| `changelogs/` | Applied superpowers-extended update history and `UPSTREAM_SHA` bookkeeping |
+| `.superpowers-extended/changelogs/` | Ignored update-time latest-changelog cache |
 
 The `.agents/` and `.claude/` trees are intentionally redundant — each tool reads the one it expects. Keep them in sync when you add, rename, or delete skills and agents.
 
 ## How to Install in a Target Repository
 
-1. Copy the entire contents of this pack into the target repository root (`.agents/`, `.claude/`, `workflows/`, `docs/`, `CLAUDE.md`, `AGENTS.md`, `INIT-SUPERPOWERS-EXTENDED.md`, `README.md`, `LICENSE`).
-2. Commit the untouched import first so later diffs are small.
-3. Work through "Placeholders" and "Files To Initialize" below.
-4. Rewrite `docs/` and the root README to match the target repository's voice (see "Docs Contract").
-5. Delete everything you do not use.
-6. Run the validation commands in the final section.
+If this file is already at the target repository root, the copy step has already happened; start from step 2.
+
+1. Copy the contents of `template/` into the target repository root, including hidden directories such as `.agents/`, `.claude/`, and `.superpowers-extended/`. The template stores entrypoint source files under `.superpowers-extended/entrypoints/`, so this copy does not replace root `AGENTS.md` or `CLAUDE.md`.
+2. Merge `.superpowers-extended/entrypoints/AGENTS.md` into the target repo's `AGENTS.md`, or copy it to `AGENTS.md` if no such file exists.
+3. Merge `.superpowers-extended/entrypoints/CLAUDE.md` into the target repo's `CLAUDE.md`, or copy it to `CLAUDE.md` if no such file exists.
+4. Copy root `LICENSE` and root `changelogs/` into the target repository root. Treat root `README.md` like any other conflict: merge or replace only after preserving target-specific content.
+5. Add `.superpowers-extended/changelogs/` to the target repository's `.gitignore`; it is an update-time cache, not applied history.
+6. Commit the untouched import first so later diffs are small.
+7. Work through "Placeholders" and "Files To Initialize" below.
+8. Rewrite `.superpowers-extended/docs/` and the root README to match the target repository's voice (see "Docs Contract").
+9. Delete everything you do not use.
+10. Run the validation commands in the final section.
 
 ## Placeholders
 
@@ -70,8 +78,8 @@ Replace these values everywhere they appear (see search command at the bottom to
 
 ### Entry-point files
 
-- `CLAUDE.md` — refresh references to match the actual repo (paths, verification commands, directory names).
-- `AGENTS.md` — same, for non-Claude tools.
+- `.superpowers-extended/entrypoints/CLAUDE.md` / `CLAUDE.md` — merge the Superpowers source content into the actual repo entrypoint, then refresh references to match the actual repo (paths, verification commands, directory names).
+- `.superpowers-extended/entrypoints/AGENTS.md` / `AGENTS.md` — same, for non-Claude tools.
 - `README.md` — project-level pitch and install instructions.
 
 ### Docs contract
@@ -80,14 +88,15 @@ Replace these values everywhere they appear (see search command at the bottom to
 
 ## Initialization Steps
 
-1. **Replace every placeholder** with repo-specific values in both trees (`.agents/` and `.claude/`).
-2. **Rewrite the docs contract** (`.agents/skills/update-docs/ROOT_DOCS.md` and `.claude/skills/update-docs/ROOT_DOCS.md`) so the sections match the real root docs in the target repo.
-3. **Sync `.claude/` with `.agents/`**: if the target repo renames or removes a skill, do it in both.
-4. **Update the entry points** (`CLAUDE.md`, `AGENTS.md`, `README.md`) to point at the target repo's actual verification/test commands and any repo-specific skills.
-5. **Delete unused skills and workflows**. Fewer paths = less drift.
-6. **Encode repo-specific checks** in the relevant skill or workflow (`<SUPPLEMENTAL_VERIFICATION_COMMANDS>` call sites) rather than burying them in comments.
-7. **Encode repo-specific review/deploy/docs flows** in the relevant skill or workflow instead of relying on agent memory.
-8. **Commit in logical chunks** so later reviewers can tell "pack imported" from "pack customized".
+1. **Ignore `.superpowers-extended/changelogs/`**. `.superpowers-extended/` contains tracked framework support files; only the latest-changelog cache is generated.
+2. **Replace every placeholder** with repo-specific values in both trees (`.agents/` and `.claude/`).
+3. **Rewrite the docs contract** (`.agents/skills/update-docs/ROOT_DOCS.md` and `.claude/skills/update-docs/ROOT_DOCS.md`) so the sections match the real root docs in the target repo.
+4. **Sync `.claude/` with `.agents/`**: if the target repo renames or removes a skill, do it in both.
+5. **Update the entry points** (`CLAUDE.md`, `AGENTS.md`, `README.md`) to point at the target repo's actual verification/test commands and any repo-specific skills.
+6. **Delete unused skills and workflows**. Fewer paths = less drift.
+7. **Encode repo-specific checks** in the relevant skill or workflow (`<SUPPLEMENTAL_VERIFICATION_COMMANDS>` call sites) rather than burying them in comments.
+8. **Encode repo-specific review/deploy/docs flows** in the relevant skill or workflow instead of relying on agent memory.
+9. **Commit in logical chunks** so later reviewers can tell "pack imported" from "pack customized".
 
 ## Keeping `.agents/` and `.claude/` in Sync
 
@@ -103,7 +112,7 @@ After initialization, these commands should be clean:
 
 ```bash
 # 1. No placeholders left anywhere (except this file, which documents them)
-rg -n "<[A-Z_]+>" .agents .claude workflows docs CLAUDE.md AGENTS.md README.md
+rg -n "<[A-Z_]+>" .agents .claude .superpowers-extended workflows CLAUDE.md AGENTS.md README.md
 
 # 2. Review drift between the two trees (expect only platform-specific wording)
 diff -ru .agents/skills .claude/skills
@@ -115,7 +124,7 @@ Command 2 is for human review — the `.claude/` tree intentionally rewords a fe
 
 ## After Installation: Staying Current
 
-Future updates to superpowers-extended are recorded as individual entries in `changelogs/`. To apply a newer version on top of your filled-in installation, follow [`UPDATE-SUPERPOWERS-EXTENDED.md`](./UPDATE-SUPERPOWERS-EXTENDED.md). Your current sync point is stored in `changelogs/UPSTREAM_SHA`.
+Future updates to superpowers-extended are recorded as individual entries in root `changelogs/`. To apply a newer version on top of your filled-in installation, follow [`UPDATE-SUPERPOWERS-EXTENDED.md`](./UPDATE-SUPERPOWERS-EXTENDED.md). Your applied sync point is stored in `changelogs/UPSTREAM_SHA`; the latest upstream changelog copy is fetched into `.superpowers-extended/changelogs/`.
 
 ## Maintaining this Pack (for pack maintainers, not consumers)
 
