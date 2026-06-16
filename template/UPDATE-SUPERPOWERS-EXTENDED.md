@@ -6,7 +6,7 @@ If you have not installed superpowers-extended yet, use `INIT-SUPERPOWERS-EXTEND
 
 ## How it works
 
-This pack publishes each upstream refresh as a self-contained changelog entry in root `changelogs/`. Each entry contains:
+This pack publishes each upstream refresh as a self-contained changelog entry in `.superpowers-extended/changelogs/`. Each entry contains:
 
 - A YAML frontmatter header with the upstream version, upstream commit SHA, and the commit range in this repo that the refresh produced.
 - A summary of what landed and what was deliberately skipped.
@@ -17,24 +17,24 @@ You fetch the latest upstream changelog copy into `.superpowers-extended/changel
 
 Do not update an initialized target repository by copying `template/` over it wholesale. Use the changelog loop below instead, and merge entrypoint changes hunk by hunk.
 
-When a changelog diff path starts with `template/`, strip that prefix before applying it in the target repository. For example, source path `template/.agents/skills/brainstorming/SKILL.md` maps to target path `.agents/skills/brainstorming/SKILL.md`, and `template/UPDATE-SUPERPOWERS-EXTENDED.md` maps to `UPDATE-SUPERPOWERS-EXTENDED.md`. If a changelog touches `template/.superpowers-extended/entrypoints/AGENTS.md` or `template/.superpowers-extended/entrypoints/CLAUDE.md`, apply the relevant changes to the target repo's merged `AGENTS.md` or `CLAUDE.md`. Root `README.md`, `LICENSE`, and `changelogs/` paths stay at root.
+When a changelog diff path starts with `template/`, strip that prefix before applying it in the target repository. For example, source path `template/.agents/skills/brainstorming/SKILL.md` maps to target path `.agents/skills/brainstorming/SKILL.md`, and `template/UPDATE-SUPERPOWERS-EXTENDED.md` maps to `UPDATE-SUPERPOWERS-EXTENDED.md`. If a changelog touches `template/.superpowers-extended/entrypoints/AGENTS.md` or `template/.superpowers-extended/entrypoints/CLAUDE.md`, apply the relevant changes to the target repo's merged `AGENTS.md` or `CLAUDE.md`. Root `README.md` and `LICENSE` stay at root, while changelog state lives under `.superpowers-extended/changelogs`.
 
 ## Preflight
 
 ### 1. Locate your current sync point
 
-Look for `changelogs/UPSTREAM_SHA` in **your** repository (the copy of superpowers-extended that you installed).
+Look for `.superpowers-extended/changelogs/UPSTREAM_SHA` in **your** repository (the copy of superpowers-extended that you installed).
 
 ```bash
-cat changelogs/UPSTREAM_SHA 2>/dev/null || echo "absent"
+cat .superpowers-extended/changelogs/UPSTREAM_SHA 2>/dev/null || echo "absent"
 ```
 
 - **If the file exists**, its content is the upstream commit SHA your installation is currently synced to.
-- **If absent**, you installed before `changelogs/` was introduced. Treat your sync point as "pre-changelog era" — every changelog in the upstream pack is unseen.
+- **If absent**, you installed before `.superpowers-extended/changelogs/` was introduced. Treat your sync point as "pre-changelog era" — every changelog in the upstream pack is unseen.
 
 ### 2. Fetch the latest superpowers-extended
 
-Pull the latest `changelogs/` directory from the upstream superpowers-extended repository into the standard target-repo cache:
+Pull the latest changelog directory from the upstream superpowers-extended repository into `.superpowers-extended/changelogs/`:
 
 ```bash
 node .superpowers-extended/scripts/fetch-latest-changelogs.js
@@ -47,7 +47,7 @@ The helper defaults to `transparent-pegasus/superpowers-extended` on `main`. If 
 
 ```bash
 # Your current sync point (or "none" if absent)
-LOCAL_SHA=$(cat changelogs/UPSTREAM_SHA 2>/dev/null || echo "none")
+LOCAL_SHA=$(cat .superpowers-extended/changelogs/UPSTREAM_SHA 2>/dev/null || echo "none")
 LATEST_SHA=$(cat .superpowers-extended/changelogs/UPSTREAM_SHA)
 echo "you are at: $LOCAL_SHA"
 echo "latest is:  $LATEST_SHA"
@@ -129,12 +129,12 @@ If something looks wrong, fix it before moving to the next changelog entry.
 
 ### Step 6: Update bookkeeping
 
-Update your local `changelogs/UPSTREAM_SHA` to the applied entry's `upstream_sha` (from its frontmatter), and copy the changelog file itself into your installation's `changelogs/` directory so future updates know where you are:
+Update your local `.superpowers-extended/changelogs/UPSTREAM_SHA` to the applied entry's `upstream_sha` (from its frontmatter), and copy the changelog file itself into your installation's `.superpowers-extended/changelogs/` directory so future updates know where you are:
 
 ```bash
-cp .superpowers-extended/changelogs/<date>-upstream-<version>.md changelogs/
+cp .superpowers-extended/changelogs/<date>-upstream-<version>.md .superpowers-extended/changelogs/
 # Read the file's frontmatter and copy the upstream_sha value
-grep "^upstream_sha:" changelogs/<date>-upstream-<version>.md | awk '{print $2}' > changelogs/UPSTREAM_SHA
+grep "^upstream_sha:" .superpowers-extended/changelogs/<date>-upstream-<version>.md | awk '{print $2}' > .superpowers-extended/changelogs/UPSTREAM_SHA
 ```
 
 ### Step 7: Commit incrementally
@@ -142,7 +142,7 @@ grep "^upstream_sha:" changelogs/<date>-upstream-<version>.md | awk '{print $2}'
 Commit each applied changelog separately so your history records the upgrade path:
 
 ```bash
-git add changelogs/ <files-you-updated>
+git add .superpowers-extended/changelogs/ <files-you-updated>
 git commit -m "chore: apply superpowers-extended changelog <date>-upstream-<version>"
 ```
 
@@ -182,6 +182,6 @@ If you find a hunk you cannot reconcile (the upstream change fundamentally chang
 
 - `INIT-SUPERPOWERS-EXTENDED.md` — first-install guide (placeholder substitution, customization, validation).
 - `.superpowers-extended/changelogs/` — latest fetched copy of upstream changelog entries.
-- `changelogs/` — historical record of every upstream refresh applied to this installation.
-- `changelogs/UPSTREAM_SHA` — the applied sync point.
+- `.superpowers-extended/changelogs/` — working copy of every upstream refresh plus the applied sync point for this installation.
+- `.superpowers-extended/changelogs/UPSTREAM_SHA` — the applied sync point.
 - `README.md` — top-level overview and feature list.

@@ -1,6 +1,6 @@
 # INIT-SUPERPOWERS-EXTENDED
 
-This repository ships as a portable extension pack that layers specialized agents, skills, and workflows onto any project. In the source repository, the installable payload lives under `template/`; root `README.md`, `LICENSE`, and `changelogs/` are copied alongside that payload. Before using it in a real repository, replace the placeholders listed below, initialize the docs contract, and delete whatever you do not use.
+This repository ships as a portable extension pack that layers specialized agents, skills, and workflows onto any project. In the source repository, the installable payload lives under `template/`; root `README.md` and `LICENSE` are copied alongside that payload, while changelog state lives under `.superpowers-extended/changelogs/` in installed repositories. Before using it in a real repository, replace the placeholders listed below, initialize the docs contract, and delete whatever you do not use.
 
 ## What You Get
 
@@ -17,8 +17,7 @@ After copying the pack into a target repository, you have:
 | `.superpowers-extended/docs/` | Human-facing framework docs |
 | `.superpowers-extended/scripts/` | Cross-platform helper scripts used by install/update docs |
 | `.superpowers-extended/entrypoints/` | Source content to merge into root instruction files |
-| `changelogs/` | Applied superpowers-extended update history and `UPSTREAM_SHA` bookkeeping |
-| `.superpowers-extended/changelogs/` | Ignored update-time latest-changelog cache |
+| `.superpowers-extended/changelogs/` | Fetched upstream changelog entries, local `UPSTREAM_SHA` bookkeeping, and the ignored update-time cache |
 
 The `.agents/` and `.claude/` trees are intentionally redundant — each tool reads the one it expects. Keep them in sync when you add, rename, or delete skills and agents.
 
@@ -29,8 +28,8 @@ If this file is already at the target repository root, the copy step has already
 1. Copy the contents of `template/` into the target repository root, including hidden directories such as `.agents/`, `.claude/`, and `.superpowers-extended/`. The template stores entrypoint source files under `.superpowers-extended/entrypoints/`, so this copy does not replace root `AGENTS.md` or `CLAUDE.md`.
 2. Merge `.superpowers-extended/entrypoints/AGENTS.md` into the target repo's `AGENTS.md`, or copy it to `AGENTS.md` if no such file exists.
 3. Merge `.superpowers-extended/entrypoints/CLAUDE.md` into the target repo's `CLAUDE.md`, or copy it to `CLAUDE.md` if no such file exists.
-4. Copy root `LICENSE` and root `changelogs/` into the target repository root. Treat root `README.md` like any other conflict: merge or replace only after preserving target-specific content.
-5. Add `.superpowers-extended/changelogs/` to the target repository's `.gitignore`; it is an update-time cache, not applied history.
+4. Copy root `LICENSE` into the target repository root. Treat root `README.md` like any other conflict: merge or replace only after preserving target-specific content.
+5. Add `.superpowers-extended/changelogs/` to the target repository's `.gitignore`; it is the working changelog cache and sync-point store, not a root-level history directory.
 6. Commit the untouched import first so later diffs are small.
 7. Work through "Placeholders" and "Files To Initialize" below.
 8. Rewrite `.superpowers-extended/docs/` and the root README to match the target repository's voice (see "Docs Contract").
@@ -124,7 +123,7 @@ Command 2 is for human review — the `.claude/` tree intentionally rewords a fe
 
 ## After Installation: Staying Current
 
-Future updates to superpowers-extended are recorded as individual entries in root `changelogs/`. To apply a newer version on top of your filled-in installation, follow [`UPDATE-SUPERPOWERS-EXTENDED.md`](./UPDATE-SUPERPOWERS-EXTENDED.md). Your applied sync point is stored in `changelogs/UPSTREAM_SHA`; the latest upstream changelog copy is fetched into `.superpowers-extended/changelogs/`.
+Future updates to superpowers-extended are recorded as individual entries in `.superpowers-extended/changelogs/`. To apply a newer version on top of your filled-in installation, follow [`UPDATE-SUPERPOWERS-EXTENDED.md`](./UPDATE-SUPERPOWERS-EXTENDED.md). Your applied sync point is stored in `.superpowers-extended/changelogs/UPSTREAM_SHA`; the latest upstream changelog copy is fetched into the same directory.
 
 ## Maintaining this Pack (for pack maintainers, not consumers)
 

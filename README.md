@@ -87,8 +87,8 @@ superpowers-extended is designed to be copied into other repositories as an exte
 1. Copy the contents of `template/` into the target repository root, including hidden directories such as `.agents/`, `.claude/`, and `.superpowers-extended/`. The template stores entrypoint source files under `.superpowers-extended/entrypoints/`, so this copy does not replace root `AGENTS.md` or `CLAUDE.md`.
 2. Merge `.superpowers-extended/entrypoints/AGENTS.md` into the target repo's `AGENTS.md`, or copy it to `AGENTS.md` if no such file exists.
 3. Merge `.superpowers-extended/entrypoints/CLAUDE.md` into the target repo's `CLAUDE.md`, or copy it to `CLAUDE.md` if no such file exists.
-4. Copy root `LICENSE` and root `changelogs/`; merge root `README.md` only after preserving target-specific content.
-5. Add `.superpowers-extended/changelogs/` to the target repository's `.gitignore`; it is an update-time cache, not applied history.
+4. Copy root `LICENSE`; merge root `README.md` only after preserving target-specific content. In installed repositories, changelog cache and sync-point state live under `.superpowers-extended/changelogs/`, not at the root.
+5. Add `.superpowers-extended/changelogs/` to the target repository's `.gitignore`; it is the working changelog cache and sync-point store.
 6. Commit the untouched import so later diffs show only your customizations.
 7. Open **[`template/INIT-SUPERPOWERS-EXTENDED.md`](./template/INIT-SUPERPOWERS-EXTENDED.md)** and follow it end-to-end. In the target repo this file lives at `INIT-SUPERPOWERS-EXTENDED.md`. It enumerates every placeholder (`<PLAN_PATH_PATTERN>`, `<BASELINE_VERIFICATION_COMMAND>`, `<TEST_FRAMEWORK_AND_COMMANDS>`, etc.) and the files that reference them.
 8. Rewrite `.claude/skills/update-docs/ROOT_DOCS.md` and `.agents/skills/update-docs/ROOT_DOCS.md` to describe your real root docs.
@@ -109,7 +109,7 @@ The `.github/` templates are for contributing to this pack. Downstream repositor
 
 ## Changelog
 
-Each upstream-tracking refresh is recorded in [`changelogs/`](./changelogs/) as a self-contained entry: YAML metadata (upstream version + SHA, our commit range when available), summary, reconciliation decisions, and verification notes. The current upstream sync point is in [`changelogs/UPSTREAM_SHA`](./changelogs/UPSTREAM_SHA).
+Each upstream-tracking refresh is recorded in [`.superpowers-extended/changelogs/`](./template/.superpowers-extended/changelogs/) as a self-contained entry: YAML metadata (upstream version + SHA, our commit range when available), summary, reconciliation decisions, and verification notes. The current upstream sync point is in [`.superpowers-extended/changelogs/UPSTREAM_SHA`](./template/.superpowers-extended/changelogs/UPSTREAM_SHA).
 
 ## License
 
