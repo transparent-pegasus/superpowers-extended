@@ -3,18 +3,26 @@
 Use this template when dispatching an implementer subagent.
 
 ```
-Agent tool (subagent_type: general-purpose):
+Subagent (general-purpose):
   description: "Implement Task N: [task name]"
+  model: [MODEL — REQUIRED: choose per SKILL.md Model Selection; an omitted
+         model silently inherits the session's most expensive one]
   prompt: |
     You are implementing Task N: [task name]
 
     ## Task Description
 
-    [FULL TEXT of task from plan - paste it here, don't make subagent read file]
+    Read your task brief first: [BRIEF_FILE]
+    It contains the full task text from the plan.
 
     ## Context
 
     [Scene-setting: where this fits, dependencies, architectural context]
+
+    If a codegraph plugin/tool is available, use it to search relevant files
+    and symbols, then inspect callers, callees, and impact surface for the
+    planned change. If codegraph is unavailable, use ordinary repo search and
+    file reads. Do not block on missing codegraph.
 
     ## Before You Begin
 
@@ -26,19 +34,12 @@ Agent tool (subagent_type: general-purpose):
 
     **Ask them now.** Raise any concerns before starting work.
 
-    Before editing, discover the relevant code:
-    - If a codegraph plugin/tool is available, use it to search relevant files
-      and symbols, then inspect callers, callees, and impact surface for the
-      task.
-    - If codegraph is unavailable, use ordinary repo search and file reads. Do
-      not block on missing codegraph.
-
     ## Your Job
 
     Once you're clear on requirements:
     1. Implement exactly what the task specifies
     2. Request tests via the requesting-test-creation skill — the test-engineer agent authors them (you never write tests yourself)
-    3. Verify implementation works
+    3. Receive test results via receiving-test-creation and verify implementation works
     4. Commit your work
     5. Self-review (see below)
     6. Report back
@@ -47,6 +48,9 @@ Agent tool (subagent_type: general-purpose):
 
     **While you work:** If you encounter something unexpected or unclear, **ask questions**.
     It's always OK to pause and clarify. Don't guess or make assumptions.
+
+    While iterating, run the focused test for what you're changing; run the
+    full suite once before committing, not after every edit.
 
     ## Code Organization
 
@@ -98,21 +102,42 @@ Agent tool (subagent_type: general-purpose):
     - Did I follow existing patterns in the codebase?
 
     **Testing:**
-    - Do tests actually verify behavior (not just mock behavior)?
     - Did I route test creation through the test-engineer agent (never authored tests myself)?
-    - Are tests comprehensive?
+    - Did I follow the requesting-test-creation / receiving-test-creation loop if TDD was required?
+    - Did I incorporate test-engineer bug reports before proceeding?
+    - Is the test output pristine (no stray warnings or noise)?
 
     If you find issues during self-review, fix them now before reporting.
 
+    ## After Review Findings
+
+    If a reviewer finds issues and you fix them, re-run the verification that
+    covers the amended code and append the results to your report file. If the
+    fix requires new or changed tests, request them from the test-engineer.
+    Reviewers will not re-run tests for you — your report is the test evidence.
+
     ## Report Format
 
-    When done, report:
-    - **Status:** DONE | DONE_WITH_CONCERNS | BLOCKED | NEEDS_CONTEXT
+    Write your full report to [REPORT_FILE]:
     - What you implemented (or what you attempted, if blocked)
     - What you tested and test results
+    - **TDD Evidence** (if TDD was required for this task):
+      - RED: test-engineer report or command run, relevant failing output before implementation, and why the failure was expected
+      - GREEN: command run and relevant passing output after implementation
     - Files changed
     - Self-review findings (if any)
     - Any issues or concerns
+
+    Then report back with ONLY (under 15 lines — the detail lives in the
+    report file):
+    - **Status:** DONE | DONE_WITH_CONCERNS | BLOCKED | NEEDS_CONTEXT
+    - Commits created (short SHA + subject)
+    - One-line test summary (e.g. "14/14 passing, output pristine")
+    - Your concerns, if any
+    - The report file path
+
+    If BLOCKED or NEEDS_CONTEXT, put the specifics in the final message
+    itself — the controller acts on it directly.
 
     Use DONE_WITH_CONCERNS if you completed the work but have doubts about correctness.
     Use BLOCKED if you cannot complete the task. Use NEEDS_CONTEXT if you need

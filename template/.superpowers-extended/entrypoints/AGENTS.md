@@ -9,7 +9,7 @@ This workspace implements a **specialized multi-agent architecture** ("Superpowe
 - **Independent TDD**: No production code is written until a dedicated test agent has written a failing test.
 - **Isolated workspaces**: New features develop in a git worktree, never directly on `main`.
 - **Bite-sized tasks**: Plans are broken into 2-5 minute steps so every change is verifiable.
-- **Two-stage review**: Every task is reviewed first for spec compliance, then for code quality.
+- **Task review**: Every task receives one task-scoped review with separate spec-compliance and code-quality verdicts.
 
 ## Directory Map
 
@@ -38,7 +38,7 @@ Skills provide structured procedures. Discover them from `.agents/skills/` (or `
 - `writing-plans` — Design → bite-sized implementation plan.
 
 **Operational & Execution**
-- `subagent-driven-development` — Primary implementation engine (fresh subagent per task, two-stage review).
+- `subagent-driven-development` — Primary implementation engine (fresh subagent per task, task review + final review).
 - `executing-plans` — Batch execution with checkpoints (separate session).
 - `dispatching-parallel-agents` — Parallelize independent tasks.
 - `finishing-a-development-branch` — Merge/PR/cleanup.

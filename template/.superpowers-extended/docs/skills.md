@@ -14,11 +14,11 @@ The two trees mirror each other. Edit both when adding or changing a skill.
 ## Strategic & Planning
 
 - **`brainstorming`** — Turn an idea into an approved design through one-question-at-a-time dialogue. Writes the design to `<DESIGN_DOC_PATH_PATTERN>` (do not commit). Terminal state is invoking `writing-plans`. Includes an optional **visual companion** (browser-based Node.js server in `brainstorming/scripts/` and `brainstorming/visual-companion.md`) for mockups, diagrams, and visual comparisons. Inline spec self-review (placeholder/consistency/scope/ambiguity) runs before the user-review gate.
-- **`writing-plans`** — Break the approved design into bite-sized, TDD-shaped tasks. Writes the plan to `<PLAN_PATH_PATTERN>` (do not commit). Includes a File Structure section, Scope Check, "No Placeholders" guardrails, and inline self-review. Offers `subagent-driven-development` or `executing-plans` as co-equal next steps.
+- **`writing-plans`** — Break the approved design into bite-sized, TDD-shaped tasks. Writes the plan to `<PLAN_PATH_PATTERN>` (do not commit). Includes File Structure, Task Right-Sizing, Global Constraints, per-task Interfaces, "No Placeholders" guardrails, and inline self-review. Offers `subagent-driven-development` or `executing-plans` as co-equal next steps.
 
 ## Operational & Execution
 
-- **`subagent-driven-development`** — Primary implementation engine. Dispatches a fresh subagent per task with a two-stage review (spec compliance → code quality) after each task. Implementer status protocol: `DONE / DONE_WITH_CONCERNS / BLOCKED / NEEDS_CONTEXT`. Reviewers are dispatched as the named `code-reviewer` agent (not `general-purpose`). Includes model-selection guidance and "in over your head" escalation.
+- **`subagent-driven-development`** — Primary implementation engine. Dispatches a fresh implementer per task, hands task briefs/review packages through files, runs one task review with separate spec-compliance and code-quality verdicts, and finishes with a broad whole-branch review. Implementer status protocol: `DONE / DONE_WITH_CONCERNS / BLOCKED / NEEDS_CONTEXT`. Reviewers are dispatched as the named `code-reviewer` agent (not `general-purpose`). Includes model-selection guidance, pre-flight plan review, and a durable progress ledger.
 - **`executing-plans`** — Alternative for batch execution with human-in-the-loop checkpoints. Good for a separate session.
 - **`dispatching-parallel-agents`** — Partition 2+ independent tasks and dispatch one subagent per domain concurrently.
 - **`finishing-a-development-branch`** — Verify tests, then present four merge/PR/keep/discard options. Cleans up the worktree.

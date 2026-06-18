@@ -39,7 +39,7 @@ Use when: the change is small enough to land without a separate written plan or 
 All five workflows share the same guardrails:
 
 - **Safety**: Never write to `main`/`master` without explicit user consent; work happens on a feature branch (and, for most workflows, in a dedicated worktree).
-- **Quality**: No task is marked complete without a RED-GREEN test cycle and a two-stage review.
+- **Quality**: No task is marked complete without RED-GREEN evidence and a task review that returns both spec-compliance and code-quality verdicts.
 - **Transparency**: Each step blocks for user confirmation. Agents do not proceed autonomously through the whole cycle.
 - **Evidence**: `verification-before-completion` runs before any "done" claim.
 - **Root cause over symptoms**: When tests fail, `systematic-debugging` drives the investigation.

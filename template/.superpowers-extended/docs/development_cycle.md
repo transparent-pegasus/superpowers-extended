@@ -42,7 +42,7 @@ The active coding phase. Each task in the plan is executed sequentially using sp
     2. Dispatch the **test-engineer** to write failing tests (**RED**) — in parallel with implementation.
     3. Implement the minimal code to pass the tests (**GREEN**).
     4. Self-review and commit.
-    5. Two-stage review: **Spec Compliance** first, then **Code Quality**.
+    5. Task review: one `code-reviewer` pass returns separate **Spec Compliance** and **Task Quality** verdicts.
 - **Skills**: `subagent-driven-development`, `requesting-test-creation`, `test-driven-development`.
 - **Agents**: `test-engineer`, `code-reviewer`.
 

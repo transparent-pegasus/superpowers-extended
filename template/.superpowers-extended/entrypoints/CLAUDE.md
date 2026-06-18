@@ -22,7 +22,7 @@ Skills provide structured guidance and automated procedures. In Claude Code they
 - `writing-plans`: Breaking designs into bite-sized tasks. (`.claude/skills/writing-plans/SKILL.md`)
 
 ### Operational & Execution
-- `subagent-driven-development`: Primary implementation engine with two-stage review. (`.claude/skills/subagent-driven-development/SKILL.md`)
+- `subagent-driven-development`: Primary implementation engine with task review and final review. (`.claude/skills/subagent-driven-development/SKILL.md`)
 - `executing-plans`: Batch execution with checkpoints. (`.claude/skills/executing-plans/SKILL.md`)
 - `dispatching-parallel-agents`: Partition independent work for parallel subagents. (`.claude/skills/dispatching-parallel-agents/SKILL.md`)
 - `finishing-a-development-branch`: Merging and cleanup. (`.claude/skills/finishing-a-development-branch/SKILL.md`)

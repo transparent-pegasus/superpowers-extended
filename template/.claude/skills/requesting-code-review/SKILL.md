@@ -31,13 +31,13 @@ HEAD_SHA=$(git rev-parse HEAD)
 
 **2. Dispatch code reviewer subagent:**
 
-Use the Agent tool with `subagent_type: code-reviewer`, filling in the template at `code-reviewer.md`
+Use the Agent tool with `subagent_type: code-reviewer`, filling in the template at [code-reviewer.md](code-reviewer.md)
 
 **Placeholders:**
-- `{DESCRIPTION}` - Brief summary of what you built
-- `{PLAN_OR_REQUIREMENTS}` - What it should do
-- `{BASE_SHA}` - Starting commit
-- `{HEAD_SHA}` - Ending commit
+- `[DESCRIPTION]` - Brief summary of what you built
+- `[PLAN_OR_REQUIREMENTS]` - What it should do
+- `[BASE_SHA]` - Starting commit
+- `[HEAD_SHA]` - Ending commit
 
 **3. Act on feedback:**
 - Fix Critical issues immediately
@@ -100,4 +100,4 @@ You: [Fix progress indicators]
 - Show code/tests that prove it works
 - Request clarification
 
-See template at: requesting-code-review/code-reviewer.md
+See template at: [code-reviewer.md](code-reviewer.md)

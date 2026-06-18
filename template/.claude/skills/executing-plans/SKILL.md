@@ -11,7 +11,7 @@ Load plan, review critically, execute all tasks, report when complete.
 
 **Announce at start:** "I'm using the executing-plans skill to implement this plan."
 
-**Note:** This fork supports two execution paths as co-equal choices. Use `subagent-driven-development` for fresh-subagent-per-task execution with two-stage review (recommended when subagents are available, e.g. via `/execute`). Use this skill for inline, single-session sequential execution with checkpoints. Choose based on your session model, not platform capability.
+**Note:** This fork supports two execution paths as co-equal choices. Use `subagent-driven-development` for fresh-subagent-per-task execution with task review and final review (recommended when subagents are available, e.g. via `/execute`). Use this skill for inline, single-session sequential execution with checkpoints. Choose based on your session model, not platform capability.
 
 ## The Process
 
@@ -20,7 +20,7 @@ Load plan, review critically, execute all tasks, report when complete.
 2. If a codegraph plugin/tool is available, validate the plan's named files, symbols, dependencies, and likely impact surface with codegraph search/callers/callees/impact. If unavailable, validate with ordinary repo search and file reads.
 3. Review critically - identify any questions or concerns about the plan
 4. If concerns: Raise them with your human partner before starting
-5. If no concerns: Create TodoWrite and proceed
+5. If no concerns: Create todos for the plan items and proceed
 
 ### Step 2: Execute Tasks
 

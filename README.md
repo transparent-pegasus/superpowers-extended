@@ -8,17 +8,17 @@
 - **Independent TDD.** No production code ships without a failing test written first (RED-GREEN-REFACTOR).
 - **Isolated workspaces.** Feature work happens in a git worktree, never on the main branch.
 - **Bite-sized tasks.** Plans are broken into 2–5 minute verifiable steps.
-- **Two-stage review.** Every task gets a spec-compliance review followed by a code-quality review.
+- **Task review.** Every task gets one task-scoped review with separate spec-compliance and code-quality verdicts.
 - **Visual brainstorming companion (optional).** Browser-based mockups, diagrams, and visual comparisons alongside terminal conversation when a question is better seen than read.
 - **Codegraph-assisted discovery (optional).** When a codegraph plugin/tool is available, skills use it to find related files, symbols, callers, callees, and impact surfaces before planning, editing, debugging, testing, or reviewing.
 
-Tracks upstream [obra/superpowers](https://github.com/obra/superpowers) — currently synced to v5.1.0 plus post-release commit `6fd4507`.
+Tracks upstream [obra/superpowers](https://github.com/obra/superpowers) — currently synced to v6.0.2 (`b62616f`).
 
 ## Optional Codegraph Integration
 
 The codegraph integration is opportunistic. The skills activate codegraph-specific discovery rules only when a codegraph plugin or equivalent tool is available in the current agent environment. If it is not available, agents continue with the normal fallback path: `rg`, file reads, stack traces, diffs, recent commits, and manual dependency tracing.
 
-When available, codegraph is used during brainstorming context discovery, implementation-plan file selection, plan review before execution, root-cause tracing, test-location discovery, code review scope discovery, review-feedback verification, and subagent implementation/spec-review prompts.
+When available, codegraph is used during brainstorming context discovery, implementation-plan file selection, plan review before execution, root-cause tracing, test-location discovery, code review scope discovery, review-feedback verification, and subagent implementation/task-review prompts.
 
 ## Supported Platforms
 
@@ -109,7 +109,7 @@ The `.github/` templates are for contributing to this pack. Downstream repositor
 
 ## Changelog
 
-Each upstream-tracking refresh is recorded in [`.superpowers-extended/changelogs/`](./template/.superpowers-extended/changelogs/) as a self-contained entry: YAML metadata (upstream version + SHA, our commit range when available), summary, reconciliation decisions, and verification notes. The current upstream sync point is in [`.superpowers-extended/changelogs/UPSTREAM_SHA`](./template/.superpowers-extended/changelogs/UPSTREAM_SHA).
+Each upstream-tracking refresh is recorded in [`changelogs/`](./changelogs/) as a self-contained entry: YAML metadata (upstream version + SHA, our commit range when available), summary, reconciliation decisions, and verification notes. The current upstream sync point is in [`changelogs/UPSTREAM_SHA`](./changelogs/UPSTREAM_SHA).
 
 ## License
 
