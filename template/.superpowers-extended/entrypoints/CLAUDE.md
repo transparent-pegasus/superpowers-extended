@@ -60,4 +60,4 @@ When operating in this workspace, you MUST:
 
 ## Initialization
 
-This repository ships the framework with placeholders (`<PLAN_PATH_PATTERN>`, `<BASELINE_VERIFICATION_COMMAND>`, etc.) so it can be dropped into other projects. Before using it in a real repository, follow `INIT-SUPERPOWERS-EXTENDED.md` to fill the placeholders and rewrite the docs contract in `.claude/skills/update-docs/ROOT_DOCS.md`.
+This repository ships the framework with placeholders (`<PLAN_PATH_PATTERN>`, `<BASELINE_VERIFICATION_COMMAND>`, etc.) so it can be dropped into other projects. Before using it in a real repository, follow `.superpowers-extended/INIT-SUPERPOWERS-EXTENDED.md` to fill the placeholders and rewrite the docs contract in `.claude/skills/update-docs/ROOT_DOCS.md`.
