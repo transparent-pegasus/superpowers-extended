@@ -1,4 +1,5 @@
 .worktrees/
+.serena/
 /.superpowers-extended/changelogs/
 docs/superpowers/specs/
 docs/superpowers/plans/
