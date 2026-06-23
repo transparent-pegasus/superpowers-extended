@@ -1,19 +1,21 @@
 # Updating an Existing superpowers-extended Installation
 
-This guide is for repositories that already installed superpowers-extended (per `.superpowers-extended/INIT-SUPERPOWERS-EXTENDED.md`) and now want to pull in a newer version of the pack on top of their installation.
+This guide is for repositories that already installed superpowers-extended (per `.superpowers-extended/INIT-SUPERPOWERS-EXTENDED.md`) and now want to pull in a newer version of the pack on top of their installation. It covers both original `obra/superpowers` updates and changes made directly in `transparent-pegasus/superpowers-extended`.
 
 If you have not installed superpowers-extended yet, use `.superpowers-extended/INIT-SUPERPOWERS-EXTENDED.md` instead.
 
 ## How it works
 
-This pack publishes each upstream refresh as a self-contained changelog entry in `.superpowers-extended/changelogs/`. Each entry contains:
+This pack publishes update entries in `.superpowers-extended/changelogs/`. Entries can describe either an upstream `obra/superpowers` refresh or a native superpowers-extended change. Each entry contains:
 
-- A YAML frontmatter header with the upstream version, upstream commit SHA, and the commit range in this repo that the refresh produced.
+- A YAML frontmatter header with one or both sync cursors:
+  - `upstream_sha` for the original `obra/superpowers` commit that was reconciled.
+  - `extended_sha` or `ours_to_sha` for the `transparent-pegasus/superpowers-extended` commit that introduced the pack change.
 - A summary of what landed and what was deliberately skipped.
 - Reconciliation decisions (fork-specific rewrites — named-agent dispatch, placeholders, etc.).
 - A full unified diff of the changes that landed in this repo.
 
-You fetch the latest upstream changelog copy into `.superpowers-extended/changelogs/`, then apply each unseen entry **manually, hunk by hunk**, on top of your installation. There is no automated patcher because every consumer's installation diverges differently (filled placeholders, deleted skills, local customizations) — a blind `patch -p1` would corrupt those.
+You fetch the latest changelog copy into `.superpowers-extended/changelogs/`, then apply each unseen entry **manually, hunk by hunk**, on top of your installation. There is no automated patcher because every consumer's installation diverges differently (filled placeholders, deleted skills, local customizations) — a blind `patch -p1` would corrupt those.
 
 Do not update an initialized target repository by copying `template/` over it wholesale. Use the changelog loop below instead, and merge entrypoint changes hunk by hunk.
 
@@ -21,20 +23,27 @@ When a changelog diff path starts with `template/`, strip that prefix before app
 
 ## Preflight
 
-### 1. Locate your current sync point
+### 1. Locate your current sync points
 
-Look for `.superpowers-extended/changelogs/UPSTREAM_SHA` in **your** repository (the copy of superpowers-extended that you installed).
+Look for these files in **your** repository (the copy of superpowers-extended that you installed):
+
+- `.superpowers-extended/changelogs/UPSTREAM_SHA`: last original `obra/superpowers` commit you reconciled.
+- `.superpowers-extended/changelogs/SUPERPOWERS_EXTENDED_SHA`: last `transparent-pegasus/superpowers-extended` commit you reconciled.
 
 ```bash
-cat .superpowers-extended/changelogs/UPSTREAM_SHA 2>/dev/null || echo "absent"
+LOCAL_UPSTREAM_SHA=$(cat .superpowers-extended/changelogs/UPSTREAM_SHA 2>/dev/null || echo "none")
+LOCAL_EXTENDED_SHA=$(cat .superpowers-extended/changelogs/SUPERPOWERS_EXTENDED_SHA 2>/dev/null || echo "none")
+echo "upstream cursor before fetch: $LOCAL_UPSTREAM_SHA"
+echo "extended cursor before fetch: $LOCAL_EXTENDED_SHA"
 ```
 
-- **If the file exists**, its content is the upstream commit SHA your installation is currently synced to.
-- **If absent**, you installed before `.superpowers-extended/changelogs/` was introduced. Treat your sync point as "pre-changelog era" — every changelog in the upstream pack is unseen.
+- **If `UPSTREAM_SHA` exists**, its content is the original Superpowers commit SHA your installation is currently synced to.
+- **If `SUPERPOWERS_EXTENDED_SHA` exists**, its content is the superpowers-extended commit SHA your installation is currently synced to.
+- **If either file is absent**, treat that stream as unknown. For `UPSTREAM_SHA`, every upstream changelog entry is unseen. For `SUPERPOWERS_EXTENDED_SHA`, use the installed changelog files and the fallback diff command below to identify pack-native changes.
 
 ### 2. Fetch the latest superpowers-extended
 
-Pull the latest changelog directory from the upstream superpowers-extended repository into `.superpowers-extended/changelogs/`:
+Pull the latest changelog directory from the superpowers-extended repository into `.superpowers-extended/changelogs/`:
 
 ```bash
 node .superpowers-extended/scripts/fetch-latest-changelogs.js
@@ -46,17 +55,26 @@ The helper defaults to `transparent-pegasus/superpowers-extended` on `main`. If 
 ### 3. Identify unseen entries
 
 ```bash
-# Your current sync point (or "none" if absent)
-LOCAL_SHA=$(cat .superpowers-extended/changelogs/UPSTREAM_SHA 2>/dev/null || echo "none")
-LATEST_SHA=$(cat .superpowers-extended/changelogs/UPSTREAM_SHA)
-echo "you are at: $LOCAL_SHA"
-echo "latest is:  $LATEST_SHA"
+# Use the LOCAL_* values saved before fetching. If you opened a new shell,
+# repeat step 1 before fetching again.
+echo "upstream cursor before fetch: ${LOCAL_UPSTREAM_SHA:-none}"
+echo "extended cursor before fetch: ${LOCAL_EXTENDED_SHA:-none}"
 
 # Listed in chronological order; sorted by filename (YYYY-MM-DD prefix)
 ls .superpowers-extended/changelogs/*.md
 ```
 
-For each changelog entry whose `upstream_sha` you have **not** yet applied, you'll walk the cherry-pick loop below.
+For each changelog entry whose `upstream_sha`, `extended_sha`, or `ours_to_sha` you have **not** yet applied, walk the cherry-pick loop below.
+
+If there are no changelog entries for native superpowers-extended changes after your `SUPERPOWERS_EXTENDED_SHA`, inspect the pack commit range directly and treat the resulting diffs as ad hoc changelog entries:
+
+```bash
+git clone https://github.com/transparent-pegasus/superpowers-extended.git /tmp/superpowers-extended-latest
+git -C /tmp/superpowers-extended-latest diff --stat <SUPERPOWERS_EXTENDED_SHA>..main -- template/ README.md changelogs/
+git -C /tmp/superpowers-extended-latest diff <SUPERPOWERS_EXTENDED_SHA>..main -- template/ README.md changelogs/
+```
+
+Only apply diffs that affect installed payload paths. For paths under `template/`, strip the `template/` prefix when applying them to your target repository.
 
 ## The cherry-pick loop
 
@@ -64,7 +82,7 @@ Repeat for each unseen changelog entry, oldest first:
 
 ### Step 1: Read the entry
 
-Open `.superpowers-extended/changelogs/<date>-upstream-<version>.md`. Read the summary, the upstream coverage, and especially the reconciliation decisions. Those decisions are how the pack maintainer reconciled upstream against the fork model — they may or may not match your local customizations.
+Open `.superpowers-extended/changelogs/<date>-*.md`. Read the summary, the upstream coverage if present, and especially the reconciliation decisions. Those decisions are how the pack maintainer reconciled upstream or pack-native changes against the fork model — they may or may not match your local customizations.
 
 ### Step 2: Walk the diff section by section
 
@@ -114,7 +132,7 @@ diff -r .claude/skills/<name> .agents/skills/<name>
 
 ### Step 5: Post-changelog verification
 
-After applying everything from a single changelog entry, re-run the validation block from `.superpowers-extended/INIT-SUPERPOWERS-EXTENDED.md`:
+After applying everything from a single changelog entry or ad hoc pack diff, re-run the validation block from `.superpowers-extended/INIT-SUPERPOWERS-EXTENDED.md`:
 
 ```bash
 # 1. No placeholders left anywhere (except docs that document them)
@@ -129,12 +147,23 @@ If something looks wrong, fix it before moving to the next changelog entry.
 
 ### Step 6: Update bookkeeping
 
-Update your local `.superpowers-extended/changelogs/UPSTREAM_SHA` to the applied entry's `upstream_sha` (from its frontmatter), and copy the changelog file itself into your installation's `.superpowers-extended/changelogs/` directory so future updates know where you are:
+Update your local sync cursor for the stream you just applied, and copy the changelog file itself into your installation's `.superpowers-extended/changelogs/` directory so future updates know where you are:
 
 ```bash
-cp .superpowers-extended/changelogs/<date>-upstream-<version>.md .superpowers-extended/changelogs/
-# Read the file's frontmatter and copy the upstream_sha value
-grep "^upstream_sha:" .superpowers-extended/changelogs/<date>-upstream-<version>.md | awk '{print $2}' > .superpowers-extended/changelogs/UPSTREAM_SHA
+ENTRY=.superpowers-extended/changelogs/<date>-<entry-name>.md
+# If the entry was staged somewhere else, copy it into .superpowers-extended/changelogs/ first.
+
+UPSTREAM_SHA=$(awk '/^upstream_sha:/ { print $2; exit }' "$ENTRY")
+EXTENDED_SHA=$(awk '/^(extended_sha|ours_to_sha):/ && $2 != "pending" { print $2; exit }' "$ENTRY")
+
+[ -n "$UPSTREAM_SHA" ] && printf '%s\n' "$UPSTREAM_SHA" > .superpowers-extended/changelogs/UPSTREAM_SHA
+[ -n "$EXTENDED_SHA" ] && printf '%s\n' "$EXTENDED_SHA" > .superpowers-extended/changelogs/SUPERPOWERS_EXTENDED_SHA
+```
+
+If you applied an ad hoc pack diff instead of a changelog entry, write the superpowers-extended commit you diffed through:
+
+```bash
+git -C /tmp/superpowers-extended-latest rev-parse main > .superpowers-extended/changelogs/SUPERPOWERS_EXTENDED_SHA
 ```
 
 ### Step 7: Commit incrementally
@@ -181,7 +210,8 @@ If you find a hunk you cannot reconcile (the upstream change fundamentally chang
 ## Reference
 
 - `.superpowers-extended/INIT-SUPERPOWERS-EXTENDED.md` — first-install guide (placeholder substitution, customization, validation).
-- `.superpowers-extended/changelogs/` — latest fetched copy of upstream changelog entries.
-- `.superpowers-extended/changelogs/` — working copy of every upstream refresh plus the applied sync point for this installation.
-- `.superpowers-extended/changelogs/UPSTREAM_SHA` — the applied sync point.
+- `.superpowers-extended/changelogs/` — latest fetched copy of upstream and pack-native changelog entries.
+- `.superpowers-extended/changelogs/` — working copy of every applied update entry plus the applied sync points for this installation.
+- `.superpowers-extended/changelogs/UPSTREAM_SHA` — applied original `obra/superpowers` sync point.
+- `.superpowers-extended/changelogs/SUPERPOWERS_EXTENDED_SHA` — applied `transparent-pegasus/superpowers-extended` sync point.
 - `README.md` — top-level overview and feature list.
