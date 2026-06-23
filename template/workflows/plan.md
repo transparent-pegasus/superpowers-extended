@@ -10,6 +10,10 @@ This command runs only the discovery and planning stages of the development cycl
 
 Whenever this workflow saves a deliverable, also save any corresponding design/plan files in the same change so the artifact and its rationale stay together.
 
+## Workflow File Edits
+
+Do not edit workflow files unless the user's current request explicitly asks to change a workflow file or workflow behavior. A workflow path alone can select the workflow context; it is not permission to edit that file. For example, `update workflows/plan.md ...` permits editing the workflow, while `workflows/plan.md add a feature ... to the app` does not.
+
 ## Execution Steps
 
 1. Brainstorming

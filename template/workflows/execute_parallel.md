@@ -10,6 +10,10 @@ This command runs the post-plan execution stages of the development cycle when t
 
 Whenever this workflow saves a deliverable, also save any corresponding design/plan files in the same change so the artifact and its rationale stay together.
 
+## Workflow File Edits
+
+Do not edit workflow files unless the user's current request explicitly asks to change a workflow file or workflow behavior. A workflow path alone can select the workflow context; it is not permission to edit that file. For example, `update workflows/plan.md ...` permits editing the workflow, while `workflows/plan.md add a feature ... to the app` does not.
+
 ## Execution Steps
 
 1. Implementation Track Extraction
