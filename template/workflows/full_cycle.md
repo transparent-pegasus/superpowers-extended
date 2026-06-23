@@ -6,6 +6,10 @@ description: Interactive workflow to execute the entire development cycle from b
 
 This command executes the full development cycle interactively. Follow these steps and move on as soon as each stage is complete.
 
+## Deliverable Saves
+
+Whenever this workflow saves a deliverable, also save any corresponding design/plan files in the same change so the artifact and its rationale stay together.
+
 ## Execution Steps
 
 1. Brainstorming

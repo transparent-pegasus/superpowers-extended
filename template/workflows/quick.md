@@ -6,6 +6,10 @@ description: Interactive workflow for a shortened development cycle from brainst
 
 This command runs a shortened development cycle for small-scoped changes in this repository. It keeps the `/full_cycle` flow's brainstorming, documentation, implementation, verification, and review phases while omitting workspace isolation, separate plan creation, and integration cleanup. Follow these steps and require explicit user confirmation before advancing to the next stage.
 
+## Deliverable Saves
+
+Whenever this workflow saves a deliverable, also save any corresponding design/plan files in the same change so the artifact and its rationale stay together.
+
 ## Execution Steps
 
 1. Brainstorming

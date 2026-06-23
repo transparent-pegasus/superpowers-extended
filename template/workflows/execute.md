@@ -6,6 +6,10 @@ description: Interactive workflow for workspace isolation, implementation, testi
 
 This command runs the post-plan execution stages of the development cycle. Follow these steps and require user consensus before advancing to the next phase, except between Step 1 and Step 2.
 
+## Deliverable Saves
+
+Whenever this workflow saves a deliverable, also save any corresponding design/plan files in the same change so the artifact and its rationale stay together.
+
 ## Execution Steps
 
 1. Workspace Isolation
