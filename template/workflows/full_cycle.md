@@ -22,16 +22,16 @@ Read the brainstorming SKILL.md.
 Engage in a design and requirement gathering discussion without writing implementation code.
 Proceed to Step 2 as soon as the last clarifying question has been answered and there are no unresolved design concerns.
 
-2. Workspace Isolation
-Inform the user that you will create an isolated workspace.
-Read and use the using-git-worktrees skill to set up a new branch and worktree (e.g., feature/xxx).
-
-3. Plan Creation
+2. Plan Creation
 Inform the user that you will create an implementation plan.
 Read and use the writing-plans skill to break the design into small achievable tasks.
 Save the plan to `<PLAN_PATH_PATTERN>`.
 Ask the user to review and approve the plan.
-Proceed to Step 4 only after the user approves the plan.
+Proceed to Step 3 only after the user approves the plan.
+
+3. Workspace Isolation
+Inform the user that you will create an isolated workspace.
+Read and use the using-git-worktrees skill to set up a new branch and worktree (e.g., feature/xxx).
 
 4. Documentation Impact Review
 Inform the user that you will identify every file that must be updated if the implementation changes behavior, contracts, prompts, schema, or workflow instructions.

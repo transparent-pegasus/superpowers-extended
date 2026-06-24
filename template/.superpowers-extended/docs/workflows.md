@@ -6,7 +6,7 @@ Workflows tie specialized agents and skills into end-to-end development procedur
 
 ### `/full_cycle`
 
-The full 6-phase development cycle for a new feature or sizeable change. Runs brainstorm → isolate → plan → implementation (with parallel testing) → documentation update → repository verification → final review → integration.
+The full development cycle for a new feature or sizeable change. Equivalent to `/plan` followed by post-plan execution (`/execute` or `/execute_parallel`): brainstorm → approved plan → isolate → implementation (with parallel testing) → documentation update → repository verification → final review → integration.
 
 Use when: starting real feature work.
 

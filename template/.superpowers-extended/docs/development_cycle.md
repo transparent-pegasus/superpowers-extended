@@ -14,22 +14,22 @@ The agent asks what you want to build and engages in a design and requirements d
 
 ---
 
-### Phase 2: Workspace Isolation (Safe Development)
-
-Once the design is approved, a new branch and isolated git worktree (e.g., `feature/xxx`) are created.
-
-- **Purpose**: Keep main untouched and prevent context pollution between features.
-- **Skill**: `using-git-worktrees`.
-
----
-
-### Phase 3: Plan Creation (Bite-Sized Tasks)
+### Phase 2: Plan Creation (Bite-Sized Tasks)
 
 The agent breaks the approved design into small, achievable tasks. Each task specifies the exact files to touch and the tests to write.
 
 - **Purpose**: Create a clear, actionable roadmap.
 - **Outcome**: A plan saved to `<PLAN_PATH_PATTERN>` (not committed).
 - **Skill**: `writing-plans`.
+
+---
+
+### Phase 3: Workspace Isolation (Safe Development)
+
+Once the plan is approved, a new branch and isolated git worktree (e.g., `feature/xxx`) are created.
+
+- **Purpose**: Keep main untouched and prevent context pollution between features.
+- **Skill**: `using-git-worktrees`.
 
 ---
 
