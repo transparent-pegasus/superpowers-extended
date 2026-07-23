@@ -9,6 +9,8 @@ Dispatch the `test-engineer` subagent to write automated tests for implementatio
 
 **Core principle:** Test creation runs in **parallel** with implementation whenever possible. Do not wait for implementation to finish before requesting tests if the API/interface is defined.
 
+**Assertions come from the spec:** the test-engineer derives expected behavior from the requirements and interface contract you pass in — never from what the implementation happens to do. Even when dispatched after implementation, give it the requirements, not a summary of your code's behavior.
+
 **Announce at start:** "I'm using the requesting-test-creation skill to dispatch the test-engineer."
 
 ## When to Request Test Creation

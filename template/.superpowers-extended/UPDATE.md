@@ -1,8 +1,8 @@
 # Updating an Existing superpowers-extended Installation
 
-This guide is for repositories that already installed superpowers-extended (per `.superpowers-extended/INIT-SUPERPOWERS-EXTENDED.md`) and now want to pull in a newer version of the pack on top of their installation. It covers both original `obra/superpowers` updates and changes made directly in `transparent-pegasus/superpowers-extended`.
+This guide is for repositories that already installed superpowers-extended (per `.superpowers-extended/INIT.md`) and now want to pull in a newer version of the pack on top of their installation. It covers both original `obra/superpowers` updates and changes made directly in `transparent-pegasus/superpowers-extended`.
 
-If you have not installed superpowers-extended yet, use `.superpowers-extended/INIT-SUPERPOWERS-EXTENDED.md` instead.
+If you have not installed superpowers-extended yet, use `.superpowers-extended/INIT.md` instead.
 
 ## How it works
 
@@ -19,7 +19,7 @@ You fetch the latest changelog copy into `.superpowers-extended/changelogs/`, th
 
 Do not update an initialized target repository by copying `template/` over it wholesale. Use the changelog loop below instead, and merge entrypoint changes hunk by hunk.
 
-When a changelog diff path starts with `template/`, strip that prefix before applying it in the target repository. For example, source path `template/.agents/skills/brainstorming/SKILL.md` maps to target path `.agents/skills/brainstorming/SKILL.md`, and `template/.superpowers-extended/UPDATE-SUPERPOWERS-EXTENDED.md` maps to `.superpowers-extended/UPDATE-SUPERPOWERS-EXTENDED.md`. If a changelog touches `template/.superpowers-extended/entrypoints/AGENTS.md` or `template/.superpowers-extended/entrypoints/CLAUDE.md`, apply the relevant changes to the target repo's merged `AGENTS.md` or `CLAUDE.md`. Root `README.md` and `LICENSE` stay at root, while install/update guides and changelog state live under `.superpowers-extended/`.
+When a changelog diff path starts with `template/`, strip that prefix before applying it in the target repository. For example, source path `template/.agents/skills/brainstorming/SKILL.md` maps to target path `.agents/skills/brainstorming/SKILL.md`, and `template/.superpowers-extended/UPDATE.md` maps to `.superpowers-extended/UPDATE.md`. If a changelog touches `template/.superpowers-extended/entrypoints/AGENTS.md` or `template/.superpowers-extended/entrypoints/CLAUDE.md`, apply the relevant changes to the target repo's merged `AGENTS.md` or `CLAUDE.md`. Root `README.md` and `LICENSE` stay at root, while install/update guides and changelog state live under `.superpowers-extended/`.
 
 ## Preflight
 
@@ -132,7 +132,7 @@ diff -r .claude/skills/<name> .agents/skills/<name>
 
 ### Step 5: Post-changelog verification
 
-After applying everything from a single changelog entry or ad hoc pack diff, re-run the validation block from `.superpowers-extended/INIT-SUPERPOWERS-EXTENDED.md`:
+After applying everything from a single changelog entry or ad hoc pack diff, re-run the validation block from `.superpowers-extended/INIT.md`:
 
 ```bash
 # 1. No placeholders left anywhere (except docs that document them)
@@ -189,7 +189,7 @@ When a changelog diff touches one of these, skip the affected hunks.
 
 ## Handling filled placeholders
 
-`.superpowers-extended/INIT-SUPERPOWERS-EXTENDED.md` enumerates every placeholder you replaced at install time. Common examples:
+`.superpowers-extended/INIT.md` enumerates every placeholder you replaced at install time. Common examples:
 
 - `<PLAN_PATH_PATTERN>`
 - `<DESIGN_DOC_PATH_PATTERN>`
@@ -209,7 +209,7 @@ If you find a hunk you cannot reconcile (the upstream change fundamentally chang
 
 ## Reference
 
-- `.superpowers-extended/INIT-SUPERPOWERS-EXTENDED.md` — first-install guide (placeholder substitution, customization, validation).
+- `.superpowers-extended/INIT.md` — first-install guide (placeholder substitution, customization, validation).
 - `.superpowers-extended/changelogs/` — latest fetched copy of upstream and pack-native changelog entries.
 - `.superpowers-extended/changelogs/` — working copy of every applied update entry plus the applied sync points for this installation.
 - `.superpowers-extended/changelogs/UPSTREAM_SHA` — applied original `obra/superpowers` sync point.

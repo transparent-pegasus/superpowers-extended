@@ -47,6 +47,14 @@ Agent tool (subagent_type: code-reviewer):
     diff. If unavailable, use `rg`, file reads, and manual dependency tracing.
     Review only evidence you actually inspect.
 
+    ## Do Not Trust the Description
+
+    The description and requirements above summarize what the implementer
+    believes was built. Treat them as unverified claims: verify each one
+    against the diff and repository state, and report gaps between claim and
+    code as findings. Never mark a requirement satisfied on the
+    description's word.
+
     ## What to Check
 
     **Plan alignment:**
@@ -67,11 +75,15 @@ Agent tool (subagent_type: code-reviewer):
     - Security concerns?
     - Integrates cleanly with surrounding code?
 
-    **Testing:**
-    - Tests verify real behavior, not mocks?
-    - Edge cases covered?
-    - Integration tests where they matter?
-    - All tests passing?
+    **Test evidence (do not audit test code — that is the test-engineer's
+    domain; audit the evidence about it):**
+    - Reports show RED before GREEN, failing for the right reason, when TDD
+      was required?
+    - Exact commands and their output present, and pristine (failures,
+      warnings, or noise in reported output are findings)?
+    - Every acceptance criterion traceable to a named test in the reports?
+    - Coverage doubts? Recommend a test-engineer follow-up in your report
+      instead of reviewing test files yourself.
 
     **Production readiness:**
     - Migration strategy if schema changed?

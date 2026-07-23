@@ -1,4 +1,4 @@
-# INIT-SUPERPOWERS-EXTENDED
+# Initializing a superpowers-extended Installation
 
 This repository ships as a portable extension pack that layers specialized agents, skills, and workflows onto any project. In the source repository, the installable payload lives under `template/`; root `README.md` and `LICENSE` are copied alongside that payload, while install/update guides and changelog state live under `.superpowers-extended/` in installed repositories. Before using it in a real repository, replace the placeholders listed below, initialize the docs contract, and delete whatever you do not use.
 
@@ -17,15 +17,15 @@ After copying the pack into a target repository, you have:
 | `.superpowers-extended/docs/` | Human-facing framework docs |
 | `.superpowers-extended/scripts/` | Cross-platform helper scripts used by install/update docs |
 | `.superpowers-extended/entrypoints/` | Source content to merge into root instruction files |
-| `.superpowers-extended/INIT-SUPERPOWERS-EXTENDED.md` | First-install guide for placeholder substitution, customization, and validation |
-| `.superpowers-extended/UPDATE-SUPERPOWERS-EXTENDED.md` | Update guide for applying newer pack changelogs |
+| `.superpowers-extended/INIT.md` | First-install guide for placeholder substitution, customization, and validation |
+| `.superpowers-extended/UPDATE.md` | Update guide for applying newer pack changelogs |
 | `.superpowers-extended/changelogs/` | Fetched upstream changelog entries, local `UPSTREAM_SHA` bookkeeping, and the ignored update-time cache |
 
 The `.agents/` and `.claude/` trees are intentionally redundant — each tool reads the one it expects. Keep them in sync when you add, rename, or delete skills and agents.
 
 ## How to Install in a Target Repository
 
-If this file is already at `.superpowers-extended/INIT-SUPERPOWERS-EXTENDED.md` in the target repository, the copy step has already happened; start from step 2.
+If this file is already at `.superpowers-extended/INIT.md` in the target repository, the copy step has already happened; start from step 2.
 
 1. Copy the contents of `template/` into the target repository root, including hidden directories such as `.agents/`, `.claude/`, and `.superpowers-extended/`. The template stores entrypoint source files under `.superpowers-extended/entrypoints/`, so this copy does not replace root `AGENTS.md` or `CLAUDE.md`.
 2. Merge `.superpowers-extended/entrypoints/AGENTS.md` into the target repo's `AGENTS.md`, or copy it to `AGENTS.md` if no such file exists.
@@ -125,7 +125,7 @@ Command 2 is for human review — the `.claude/` tree intentionally rewords a fe
 
 ## After Installation: Staying Current
 
-Future updates to superpowers-extended are recorded as individual entries in `.superpowers-extended/changelogs/`. To apply a newer version on top of your filled-in installation, follow [`.superpowers-extended/UPDATE-SUPERPOWERS-EXTENDED.md`](./UPDATE-SUPERPOWERS-EXTENDED.md). Your applied sync point is stored in `.superpowers-extended/changelogs/UPSTREAM_SHA`; the latest upstream changelog copy is fetched into the same directory.
+Future updates to superpowers-extended are recorded as individual entries in `.superpowers-extended/changelogs/`. To apply a newer version on top of your filled-in installation, follow [`.superpowers-extended/UPDATE.md`](./UPDATE.md). Your applied sync point is stored in `.superpowers-extended/changelogs/UPSTREAM_SHA`; the latest upstream changelog copy is fetched into the same directory.
 
 ## Maintaining this Pack (for pack maintainers, not consumers)
 
@@ -137,4 +137,4 @@ If you maintain superpowers-extended itself (i.e., you periodically resync from 
 4. Update `changelogs/UPSTREAM_SHA` to the new upstream SHA.
 5. Commit both alongside the refresh.
 
-This pattern is what downstream consumers rely on when they follow `.superpowers-extended/UPDATE-SUPERPOWERS-EXTENDED.md`.
+This pattern is what downstream consumers rely on when they follow `.superpowers-extended/UPDATE.md`.

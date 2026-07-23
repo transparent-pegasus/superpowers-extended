@@ -76,7 +76,7 @@ On tools without native slash commands, read the workflow file directly (e.g. `w
 
 ## Initialization
 
-This repository ships as a portable extension pack. Before using it in a real project, walk through `.superpowers-extended/INIT-SUPERPOWERS-EXTENDED.md` — it lists every placeholder (`<PLAN_PATH_PATTERN>`, `<BASELINE_VERIFICATION_COMMAND>`, `<TEST_FRAMEWORK_AND_COMMANDS>`, etc.) and the files that reference them.
+This repository ships as a portable extension pack. Before using it in a real project, walk through `.superpowers-extended/INIT.md` — it lists every placeholder (`<PLAN_PATH_PATTERN>`, `<BASELINE_VERIFICATION_COMMAND>`, `<TEST_FRAMEWORK_AND_COMMANDS>`, etc.) and the files that reference them.
 
 ## Quick Start
 

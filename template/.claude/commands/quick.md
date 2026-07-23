@@ -39,7 +39,7 @@ If only documentation, workflow, or agent-instruction files changed, note that n
 If any non-documentation file changed, run repository verification:
 - always run `<BASELINE_VERIFICATION_COMMAND>`
 - also run `<SUPPLEMENTAL_VERIFICATION_COMMANDS>` that apply to the touched surfaces, such as CLI smoke tests, integration checks, deploy checks, schema/code generation, or image builds
-If `<BASELINE_VERIFICATION_COMMAND>` or `<SUPPLEMENTAL_VERIFICATION_COMMANDS>` have not been initialized for the repository, stop and use `.superpowers-extended/INIT-SUPERPOWERS-EXTENDED.md` before proceeding.
+If `<BASELINE_VERIFICATION_COMMAND>` or `<SUPPLEMENTAL_VERIFICATION_COMMANDS>` have not been initialized for the repository, stop and use `.superpowers-extended/INIT.md` before proceeding.
 If a required verification command cannot run because Docker, gcloud, or another external dependency is unavailable, report the blocker explicitly and stop until the user decides whether to skip that check.
 Proceed to Step 6 only when verification evidence is fresh, successful, and the user confirms.
 

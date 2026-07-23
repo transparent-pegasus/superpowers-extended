@@ -11,9 +11,9 @@ Agent tool (subagent_type: test-engineer):
 ```
 
 **Your task:**
-1. Review {WHAT_TO_TEST} implementation or interface.
+1. Read the behavior expectations from {PLAN_OR_REQUIREMENTS} and the contract in {INTERFACES_OR_TYPES}; draft your test cases from these alone.
 2. If a codegraph plugin/tool is available, search nearby tests, related symbols, and callers/callees before choosing test locations. If unavailable, use ordinary repo search and file reads.
-3. Read the behavior expectations from {PLAN_OR_REQUIREMENTS}.
+3. Only after drafting test cases, look at the {WHAT_TO_TEST} implementation — to locate seams, fixtures, and conventions, never to derive assertions. If the implementation disagrees with your drafted expectations, report it as a bug instead of adjusting the test.
 4. Create automated tests matching {INTERFACES_OR_TYPES}.
 5. Follow TDD: Tests must initially fail if implementation is incomplete (RED).
 6. Ensure tests check real behavior, edge cases, and error states without relying on live network, cloud, container, hardware, or paid third-party dependencies unless explicitly requested.
