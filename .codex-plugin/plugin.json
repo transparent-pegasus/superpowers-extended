@@ -1,0 +1,41 @@
+{
+  "name": "superpowers-extended",
+  "version": "1.0.0",
+  "description": "Extension pack for coding agents: specialized roles, structured skills, and multi-phase workflows tracking obra/superpowers, with codegraph-assisted discovery",
+  "author": {
+    "name": "transparent-pegasus",
+    "url": "https://github.com/transparent-pegasus"
+  },
+  "homepage": "https://github.com/transparent-pegasus/superpowers-extended",
+  "repository": "https://github.com/transparent-pegasus/superpowers-extended",
+  "license": "MIT",
+  "keywords": [
+    "skills",
+    "workflows",
+    "tdd",
+    "code-review",
+    "planning",
+    "debugging",
+    "subagents",
+    "codegraph"
+  ],
+  "skills": "./template/.agents/skills/",
+  "hooks": {},
+  "interface": {
+    "displayName": "Superpowers Extended",
+    "shortDescription": "Roles, skills, and multi-phase workflows for coding agents",
+    "longDescription": "Use Superpowers Extended to guide agent work through brainstorming, implementation planning, test-driven development, systematic debugging, parallel execution, code review, and finish-the-branch workflows, with dedicated code-reviewer and test-engineer roles and optional codegraph-assisted discovery.",
+    "developerName": "transparent-pegasus",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "I've got an idea for something I'd like to build.",
+      "Let's add a feature to this project."
+    ],
+    "websiteURL": "https://github.com/transparent-pegasus/superpowers-extended"
+  }
+}

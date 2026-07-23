@@ -1,0 +1,23 @@
+{
+  "name": "superpowers-extended",
+  "displayName": "Superpowers Extended",
+  "description": "Extension pack for coding agents: specialized roles, structured skills, and multi-phase workflows tracking obra/superpowers, with codegraph-assisted discovery",
+  "version": "1.0.0",
+  "author": {
+    "name": "transparent-pegasus"
+  },
+  "homepage": "https://github.com/transparent-pegasus/superpowers-extended",
+  "repository": "https://github.com/transparent-pegasus/superpowers-extended",
+  "license": "MIT",
+  "keywords": [
+    "skills",
+    "workflows",
+    "tdd",
+    "code-review",
+    "planning",
+    "debugging",
+    "subagents",
+    "codegraph"
+  ],
+  "skills": "./template/.agents/skills/"
+}

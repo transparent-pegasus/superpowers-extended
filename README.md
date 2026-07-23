@@ -67,6 +67,10 @@ template/        # Files copied into the target repository root
 README.md        # Root README, copied alongside template/ contents
 LICENSE          # Root license, copied alongside template/ contents
 changelogs/      # Root applied upstream-refresh history and UPSTREAM_SHA
+.claude-plugin/  # Claude Code plugin + marketplace manifests
+.codex-plugin/   # Codex plugin manifest
+.cursor-plugin/  # Cursor plugin manifest
+.agents/plugins/ # Codex marketplace manifest (repo-root convention; payload .agents/ lives under template/)
 AGENTS.md        # Maintainer pointer to template/.superpowers-extended/entrypoints/AGENTS.md
 CLAUDE.md        # Maintainer pointer to template/.superpowers-extended/entrypoints/CLAUDE.md
 ```
@@ -79,6 +83,16 @@ CLAUDE.md        # Maintainer pointer to template/.superpowers-extended/entrypoi
 - **[Specialized Agents](./template/.superpowers-extended/docs/agents.md)** — Roles of the `code-reviewer` and `test-engineer`.
 - **[Superpowers (Skills)](./template/.superpowers-extended/docs/skills.md)** — Catalog of every skill and when to use it.
 - **[Workflows](./template/.superpowers-extended/docs/workflows.md)** — `/full_cycle`, `/plan`, `/execute`, `/execute_parallel`, `/quick`.
+
+### Installing as a plugin (Claude Code / Codex / Cursor)
+
+The repository ships plugin manifests, so the pack can also be installed as a managed plugin instead of copied:
+
+- **Claude Code:** `/plugin marketplace add transparent-pegasus/superpowers-extended`, then `/plugin install superpowers-extended@superpowers-extended`. Exposes the skills, the `/execute`, `/execute_parallel`, `/full_cycle`, `/plan`, `/quick` commands, and the `code-reviewer` / `test-engineer` agents from `template/.claude/`.
+- **Codex:** `codex plugin marketplace add transparent-pegasus/superpowers-extended`, then `codex plugin add superpowers-extended`. Exposes the skills from `template/.agents/skills/`.
+- **Cursor:** install from this repository; the manifest at `.cursor-plugin/plugin.json` exposes the skills from `template/.agents/skills/`.
+
+**Caveat:** plugin files are read-only, so repo-specific placeholders (`<TARGETED_TEST_COMMAND>`, `<PLAN_PATH_PATTERN>`, …) stay unfilled — agents will interpret them generically or ask. For a fully wired install with the INIT.md placeholder pass, use the copy-based install below.
 
 ### Installing the pack in a new repository
 

@@ -1,0 +1,20 @@
+{
+  "name": "superpowers-extended",
+  "interface": {
+    "displayName": "Superpowers Extended"
+  },
+  "plugins": [
+    {
+      "name": "superpowers-extended",
+      "source": {
+        "source": "url",
+        "url": "./"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    }
+  ]
+}
