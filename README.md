@@ -86,34 +86,17 @@ CLAUDE.md        # Maintainer pointer to template/.superpowers-extended/entrypoi
 
 ### Installing as a plugin (Claude Code / Codex / Cursor)
 
-The repository ships plugin manifests, so the pack can also be installed as a managed plugin instead of copied:
+The repository ships plugin manifests; install the pack as a managed plugin:
 
 - **Claude Code:** `/plugin marketplace add transparent-pegasus/superpowers-extended`, then `/plugin install superpowers-extended@superpowers-extended`. Exposes the skills, the `/execute`, `/execute_parallel`, `/full_cycle`, `/plan`, `/quick` commands, and the `code-reviewer` / `test-engineer` agents from `template/.claude/`.
 - **Codex:** `codex plugin marketplace add transparent-pegasus/superpowers-extended`, then `codex plugin add superpowers-extended`. Exposes the skills from `template/.agents/skills/`.
 - **Cursor:** install from this repository; the manifest at `.cursor-plugin/plugin.json` exposes the skills from `template/.agents/skills/`.
 
-**Caveat:** plugin files are read-only, so repo-specific placeholders (`<TARGETED_TEST_COMMAND>`, `<PLAN_PATH_PATTERN>`, …) stay unfilled — agents will interpret them generically or ask. For a fully wired install with the INIT.md placeholder pass, use the copy-based install below.
-
-### Installing the pack in a new repository
-
-superpowers-extended is designed to be copied into other repositories as an extension pack. To install:
-
-1. Copy the contents of `template/` into the target repository root, including hidden directories such as `.agents/`, `.claude/`, and `.superpowers-extended/`. The template stores entrypoint source files under `.superpowers-extended/entrypoints/`, so this copy does not replace root `AGENTS.md` or `CLAUDE.md`.
-2. Merge `.superpowers-extended/entrypoints/AGENTS.md` into the target repo's `AGENTS.md`, or copy it to `AGENTS.md` if no such file exists.
-3. Merge `.superpowers-extended/entrypoints/CLAUDE.md` into the target repo's `CLAUDE.md`, or copy it to `CLAUDE.md` if no such file exists.
-4. Copy root `LICENSE`; merge root `README.md` only after preserving target-specific content. In installed repositories, changelog cache and sync-point state live under `.superpowers-extended/changelogs/`, not at the root.
-5. Add `.superpowers-extended/changelogs/` to the target repository's `.gitignore`; it is the working changelog cache and sync-point store.
-6. Commit the untouched import so later diffs show only your customizations.
-7. Open **[`template/.superpowers-extended/INIT.md`](./template/.superpowers-extended/INIT.md)** and follow it end-to-end. In the target repo this file lives at `.superpowers-extended/INIT.md`. It enumerates every placeholder (`<PLAN_PATH_PATTERN>`, `<BASELINE_VERIFICATION_COMMAND>`, `<TEST_FRAMEWORK_AND_COMMANDS>`, etc.) and the files that reference them.
-8. Rewrite `.claude/skills/update-docs/ROOT_DOCS.md` and `.agents/skills/update-docs/ROOT_DOCS.md` to describe your real root docs.
-9. Delete any skills or workflows the target repo will not use.
-10. Run the validation commands at the end of `.superpowers-extended/INIT.md` to confirm no placeholders remain.
-
-Once initialized, your agents (Claude Code, Codex, Antigravity CLI, …) will have a consistent set of specialized roles, skills, and workflows with repo-specific verification and test commands already wired in.
+**Caveat:** plugin files are read-only, so repo-specific placeholders (`<TARGETED_TEST_COMMAND>`, `<PLAN_PATH_PATTERN>`, …) stay unfilled — agents will interpret them generically or ask. To wire real values, declare them in the target repo's `CLAUDE.md` / `AGENTS.md`; **[`template/.superpowers-extended/INIT.md`](./template/.superpowers-extended/INIT.md)** enumerates every placeholder and the files that reference them.
 
 ### Updating an existing installation
 
-When a newer version of superpowers-extended is published, follow **[`template/.superpowers-extended/UPDATE.md`](./template/.superpowers-extended/UPDATE.md)**. In the target repo this file lives at `.superpowers-extended/UPDATE.md`. It fetches the latest changelog copy into `.superpowers-extended/changelogs/`, then walks you through a diff-driven cherry-pick of each unseen entry with explicit handling for `template/` path translation, filled placeholders, and local customizations.
+Plugin installs update through the marketplace (`/plugin marketplace update` in Claude Code, `codex plugin marketplace upgrade` for Codex). For repositories that carry a copied-in pack, follow **[`template/.superpowers-extended/UPDATE.md`](./template/.superpowers-extended/UPDATE.md)**. In the target repo this file lives at `.superpowers-extended/UPDATE.md`. It fetches the latest changelog copy into `.superpowers-extended/changelogs/`, then walks you through a diff-driven cherry-pick of each unseen entry with explicit handling for `template/` path translation, filled placeholders, and local customizations.
 
 ## Contributing
 
