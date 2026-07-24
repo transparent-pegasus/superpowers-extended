@@ -1,0 +1,54 @@
+# Test Creation Request Template
+
+Use this template when dispatching the `test-engineer` subagent.
+
+**Purpose:** Author tests against a known interface or completed logic. The implementer never writes tests themselves — they request, the test-engineer authors.
+
+```
+Agent tool (subagent_type: test-engineer; `superpowers-extended:test-engineer` under a Claude Code plugin install):
+  description: "Author tests for {WHAT_TO_TEST}"
+  prompt: (use the template body below)
+```
+
+**Your task:**
+1. Read the behavior expectations from {PLAN_OR_REQUIREMENTS} and the contract in {INTERFACES_OR_TYPES}; draft your test cases from these alone.
+2. If a codegraph plugin/tool is available, search nearby tests, related symbols, and callers/callees before choosing test locations. If unavailable, use ordinary repo search and file reads.
+3. Only after drafting test cases, look at the {WHAT_TO_TEST} implementation — to locate seams, fixtures, and conventions, never to derive assertions. If the implementation disagrees with your drafted expectations, report it as a bug instead of adjusting the test.
+4. Create automated tests matching {INTERFACES_OR_TYPES}.
+5. Follow TDD: Tests must initially fail if implementation is incomplete (RED).
+6. Ensure tests check real behavior, edge cases, and error states without relying on live network, cloud, container, hardware, or paid third-party dependencies unless explicitly requested.
+7. Verify tests pass (GREEN) if implementation is already complete.
+
+**Placeholder resolution:** `<KEY>` placeholders in this file (such as `<PLAN_PATH_PATTERN>` or `<TARGETED_TEST_COMMAND>`) resolve from the `Superpowers Extended Configuration` section of the repository's `CLAUDE.md` / `AGENTS.md`. If that section is missing, initialize it with the pack's init workflow (`/superpowers-extended:init` on Claude Code plugin installs; `commands/init.md` otherwise).
+
+## Target
+
+**What to test:** {WHAT_TO_TEST}
+**Files:** {FILES_CHANGED}
+
+## Interface Definition
+
+{INTERFACES_OR_TYPES}
+
+## Requirements
+
+{PLAN_OR_REQUIREMENTS}
+
+## Details
+
+{DESCRIPTION}
+
+## Output Expected
+
+Return a report containing:
+### Test Strategy
+[Brief summary of approach, unit vs integration, edge cases considered]
+
+### Created/Modified Files
+[List test files]
+
+### Test Results
+[Output of `<TARGETED_TEST_COMMAND>` for these specific tests. Expected state: RED (failing correctly) or GREEN (passing correctly)]
+
+### Issues
+[Any bugs found in the implementation, unclear requirements, or untestable code]

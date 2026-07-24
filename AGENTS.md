@@ -1,7 +1,5 @@
 # Agents Guide
 
-This repository stores the target-project installation payload under `template/`.
+This repository IS the superpowers-extended plugin. The payload lives at the repo root: `skills/` (16 skills), `commands/` (6 workflows), `agents/` (code-reviewer, test-engineer), `docs/` (framework docs). Plugin manifests: `.claude-plugin/`, `.codex-plugin/`, `.cursor-plugin/`, `.agents/plugins/marketplace.json`.
 
-For the actual Superpowers agent guide source, read [`template/.superpowers-extended/entrypoints/AGENTS.md`](./template/.superpowers-extended/entrypoints/AGENTS.md). Root `README.md` and `changelogs/` intentionally stay at the repository root; they are copied alongside the contents of `template/` when installing into a target project.
-
-When editing pack behavior, update files under `template/`. Do not duplicate payload changes in this root file.
+When editing pack behavior, edit the payload directories directly. Maintainer duties (changelog protocol, validation) are listed in `CLAUDE.md` — they apply to any agent working on this repo.
