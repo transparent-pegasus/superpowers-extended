@@ -59,6 +59,7 @@ Skills provide structured procedures. Discover them from `.agents/skills/` (or `
 
 Workflow files under `workflows/` carry frontmatter `description: ...` and are surfaced as slash commands on platforms that support them.
 
+- `/init` — One-time repository initialization: writes the `Superpowers Extended Configuration` section that `<KEY>` placeholders resolve from.
 - `/full_cycle` — Full 6-phase cycle: brainstorm → isolate → plan → implement → review → integrate.
 - `/plan` — Brainstorming + plan creation only.
 - `/execute` — Post-plan execution (workspace isolation through cleanup).
@@ -76,11 +77,12 @@ On tools without native slash commands, read the workflow file directly (e.g. `w
 
 ## Initialization
 
-This repository ships as a portable extension pack. Before using it in a real project, walk through `.superpowers-extended/INIT.md` — it lists every placeholder (`<PLAN_PATH_PATTERN>`, `<BASELINE_VERIFICATION_COMMAND>`, `<TEST_FRAMEWORK_AND_COMMANDS>`, etc.) and the files that reference them.
+The framework references repo-specific values through `<KEY>` placeholders (`<PLAN_PATH_PATTERN>`, `<BASELINE_VERIFICATION_COMMAND>`, `<TEST_FRAMEWORK_AND_COMMANDS>`, etc.). They resolve from the `Superpowers Extended Configuration` section of this file / `CLAUDE.md`. If that section is missing, follow `workflows/init.md` (surfaced as `/superpowers-extended:init` on Claude Code plugin installs) — it detects the repo's tooling, confirms the values, and writes the section.
 
 ## Quick Start
 
 1. Read `.superpowers-extended/docs/development_cycle.md` for the 6-phase process.
 2. Read `.superpowers-extended/docs/skills.md` for the catalog of skills.
 3. Read `.superpowers-extended/docs/agents.md` for the specialized agent contracts.
-4. Start a feature with `/full_cycle` (or `/plan` → `/execute`).
+4. If the repository has no `Superpowers Extended Configuration` section yet, run `/init` (`workflows/init.md`).
+5. Start a feature with `/full_cycle` (or `/plan` → `/execute`).

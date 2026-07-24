@@ -9,7 +9,7 @@ description: Use when executing implementation plans with independent tasks in t
 
 This fork enforces two named-agent boundaries that override anything below:
 
-- **Task reviewers and final reviewers are dispatched as the named `code-reviewer` subagent**, not `general-purpose`. The task-reviewer template in this directory reflects that. The named agent lives at `.agents/agents/code-reviewer.md` — out of scope for this skill.
+- **Task reviewers and final reviewers are dispatched as the named `code-reviewer` subagent** (`superpowers-extended:code-reviewer` under a Claude Code plugin install), not `general-purpose`. The task-reviewer template in this directory reflects that. The named agent lives at `.agents/agents/code-reviewer.md` — out of scope for this skill.
 - **The implementer never writes tests.** The `test-engineer` named agent is the sole author of test code, owning RED-GREEN-REFACTOR. The implementer requests tests via the `superpowers:requesting-test-creation` skill and incorporates results via `superpowers:receiving-test-creation`. Wherever the rest of this document or its prompt templates say "implementer writes/runs tests," read that as "implementer requests test creation from `test-engineer` via `superpowers:requesting-test-creation`, receives the results via `superpowers:receiving-test-creation`, and runs existing verification commands as needed."
 
 Everything else below (single task-reviewer flow, file handoffs, status protocol, continuous execution, model selection, progress ledger) applies as written.

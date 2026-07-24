@@ -5,7 +5,7 @@ Use this template when dispatching the `test-engineer` subagent.
 **Purpose:** Author tests against a known interface or completed logic. The implementer never writes tests themselves — they request, the test-engineer authors.
 
 ```
-Agent tool (subagent_type: test-engineer):
+Agent tool (subagent_type: test-engineer; `superpowers-extended:test-engineer` under a Claude Code plugin install):
   description: "Author tests for {WHAT_TO_TEST}"
   prompt: (use the template body below)
 ```
@@ -18,6 +18,8 @@ Agent tool (subagent_type: test-engineer):
 5. Follow TDD: Tests must initially fail if implementation is incomplete (RED).
 6. Ensure tests check real behavior, edge cases, and error states without relying on live network, cloud, container, hardware, or paid third-party dependencies unless explicitly requested.
 7. Verify tests pass (GREEN) if implementation is already complete.
+
+**Placeholder resolution:** `<KEY>` placeholders in this file (such as `<PLAN_PATH_PATTERN>` or `<TARGETED_TEST_COMMAND>`) resolve from the `Superpowers Extended Configuration` section of the repository's `CLAUDE.md` / `AGENTS.md`. If that section is missing, initialize it with the pack's init workflow (`/superpowers-extended:init` on Claude Code plugin installs; `workflows/init.md` otherwise).
 
 ## Target
 

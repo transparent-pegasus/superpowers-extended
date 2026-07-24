@@ -13,6 +13,8 @@ Dispatch the `test-engineer` subagent to write automated tests for implementatio
 
 **Announce at start:** "I'm using the requesting-test-creation skill to dispatch the test-engineer."
 
+**Placeholder resolution:** `<KEY>` placeholders in this file (such as `<PLAN_PATH_PATTERN>` or `<TARGETED_TEST_COMMAND>`) resolve from the `Superpowers Extended Configuration` section of the repository's `CLAUDE.md` / `AGENTS.md`. If that section is missing, initialize it with the pack's init workflow (`/superpowers-extended:init` on Claude Code plugin installs; `workflows/init.md` otherwise).
+
 ## When to Request Test Creation
 
 **Mandatory:**
@@ -27,7 +29,7 @@ Understand the interfaces, function signatures, or completed logic that the test
 
 **2. Dispatch test-engineer subagent:**
 
-Use the Agent tool with `subagent_type: test-engineer`, filling in the template at `test-engineer-dispatch.md`.
+Use the Agent tool with `subagent_type: test-engineer` (`superpowers-extended:test-engineer` when the pack is installed as a Claude Code plugin), filling in the template at `test-engineer-dispatch.md`.
 
 **Placeholders:**
 - `{WHAT_TO_TEST}` - The feature, CLI surface, or function that requires tests

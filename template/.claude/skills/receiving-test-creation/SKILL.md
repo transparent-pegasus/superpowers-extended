@@ -5,6 +5,8 @@ description: Use when receiving test execution reports from the test-engineer su
 
 # Test Creation Reception
 
+**Placeholder resolution:** `<KEY>` placeholders in this file (such as `<PLAN_PATH_PATTERN>` or `<TARGETED_TEST_COMMAND>`) resolve from the `Superpowers Extended Configuration` section of the repository's `CLAUDE.md` / `AGENTS.md`. If that section is missing, initialize it with the pack's init workflow (`/superpowers-extended:init` on Claude Code plugin installs; `workflows/init.md` otherwise).
+
 ## Overview
 
 Process test results rigorously. Test failures dictate the next steps in development.

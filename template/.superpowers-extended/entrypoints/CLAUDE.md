@@ -11,7 +11,7 @@ Agent personas live in `.claude/agents/` (Claude Code) and `.agents/agents/` (Co
 - **Code Reviewer (`code-reviewer`)**: Senior-level agent for validating plan alignment and code quality. (`.claude/agents/code-reviewer.md`)
 - **Test Engineer (`test-engineer`)**: The **sole** entity permitted to write test code. Follows TDD (RED-GREEN-REFACTOR). (`.claude/agents/test-engineer.md`)
 
-Dispatch them with the Agent tool using `subagent_type: code-reviewer` or `subagent_type: test-engineer`.
+Dispatch them with the Agent tool using `subagent_type: code-reviewer` or `subagent_type: test-engineer` (named `superpowers-extended:code-reviewer` / `superpowers-extended:test-engineer` when the pack is installed as a Claude Code plugin).
 
 ## Superpowers (Skills)
 
@@ -43,6 +43,7 @@ Skills provide structured guidance and automated procedures. In Claude Code they
 
 Workflow files live in `workflows/` (shared) and `.claude/commands/` (Claude Code slash commands).
 
+- `/init`: One-time repository initialization — writes the `Superpowers Extended Configuration` section this framework resolves `<KEY>` placeholders from.
 - `/full_cycle`: Full 6-phase development cycle (brainstorm → isolate → plan → implement → review → integrate).
 - `/plan`: Brainstorming + plan creation only.
 - `/execute`: Post-plan execution (workspace isolation, implementation, review, cleanup).
@@ -60,4 +61,4 @@ When operating in this workspace, you MUST:
 
 ## Initialization
 
-This repository ships the framework with placeholders (`<PLAN_PATH_PATTERN>`, `<BASELINE_VERIFICATION_COMMAND>`, etc.) so it can be dropped into other projects. Before using it in a real repository, follow `.superpowers-extended/INIT.md` to fill the placeholders and rewrite the docs contract in `.claude/skills/update-docs/ROOT_DOCS.md`.
+The framework references repo-specific values through `<KEY>` placeholders (`<PLAN_PATH_PATTERN>`, `<BASELINE_VERIFICATION_COMMAND>`, etc.). They resolve from the `Superpowers Extended Configuration` section of this file / `AGENTS.md`. If that section is missing, run the pack's init workflow — `/superpowers-extended:init` (plugin install) or `workflows/init.md` (checked-in copy) — and, for checked-in copies, rewrite the docs contract in `.claude/skills/update-docs/ROOT_DOCS.md`.

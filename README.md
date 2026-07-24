@@ -35,8 +35,8 @@ Each tool reads the tree it expects. The two trees mirror each other — keep th
 ### Claude Code
 
 - Claude Code auto-discovers `.claude/skills/` and `.claude/agents/` and exposes `.claude/commands/` as slash commands.
-- Start a feature with `/full_cycle`, or break it up with `/plan` → `/execute` / `/execute_parallel`. For small changes use `/quick`.
-- Dispatch specialized agents with the Agent tool using `subagent_type: code-reviewer` or `subagent_type: test-engineer`.
+- Initialize the repository once with `/init` (as a plugin: `/superpowers-extended:init`), then start a feature with `/full_cycle`, or break it up with `/plan` → `/execute` / `/execute_parallel`. For small changes use `/quick`.
+- Dispatch specialized agents with the Agent tool using `subagent_type: code-reviewer` or `subagent_type: test-engineer` (named `superpowers-extended:code-reviewer` / `superpowers-extended:test-engineer` under a plugin install).
 
 ### Codex / Cursor / Aider
 
@@ -58,12 +58,9 @@ template/        # Files copied into the target repository root
   .agents/       # Agent personas and skills for Codex / Antigravity CLI
   .claude/       # Claude Code mirror, including slash-command copies
   .superpowers-extended/
-    INIT.md
-    UPDATE.md
     docs/        # Human-facing framework docs
-    scripts/     # Cross-platform install/update helper scripts
     entrypoints/ # Source content to merge into target AGENTS.md / CLAUDE.md
-  workflows/     # Workflow definitions
+  workflows/     # Workflow definitions (incl. init.md for repository initialization)
 README.md        # Root README, copied alongside template/ contents
 LICENSE          # Root license, copied alongside template/ contents
 changelogs/      # Root applied upstream-refresh history and UPSTREAM_SHA
@@ -82,21 +79,21 @@ CLAUDE.md        # Maintainer pointer to template/.superpowers-extended/entrypoi
 - **[Development Cycle Guide](./template/.superpowers-extended/docs/development_cycle.md)** — Step-by-step walkthrough of the 6-phase process.
 - **[Specialized Agents](./template/.superpowers-extended/docs/agents.md)** — Roles of the `code-reviewer` and `test-engineer`.
 - **[Superpowers (Skills)](./template/.superpowers-extended/docs/skills.md)** — Catalog of every skill and when to use it.
-- **[Workflows](./template/.superpowers-extended/docs/workflows.md)** — `/full_cycle`, `/plan`, `/execute`, `/execute_parallel`, `/quick`.
+- **[Workflows](./template/.superpowers-extended/docs/workflows.md)** — `/init`, `/full_cycle`, `/plan`, `/execute`, `/execute_parallel`, `/quick`.
 
 ### Installing as a plugin (Claude Code / Codex / Cursor)
 
 The repository ships plugin manifests; install the pack as a managed plugin:
 
-- **Claude Code:** `/plugin marketplace add transparent-pegasus/superpowers-extended`, then `/plugin install superpowers-extended@superpowers-extended`. Exposes the skills, the `/execute`, `/execute_parallel`, `/full_cycle`, `/plan`, `/quick` commands, and the `code-reviewer` / `test-engineer` agents from `template/.claude/`.
-- **Codex:** `codex plugin marketplace add transparent-pegasus/superpowers-extended`, then `codex plugin add superpowers-extended`. Exposes the skills from `template/.agents/skills/`.
-- **Cursor:** install from this repository; the manifest at `.cursor-plugin/plugin.json` exposes the skills from `template/.agents/skills/`.
+- **Claude Code:** `/plugin marketplace add transparent-pegasus/superpowers-extended`, then `/plugin install superpowers-extended@superpowers-extended`. Exposes the skills, the `/init`, `/execute`, `/execute_parallel`, `/full_cycle`, `/plan`, `/quick` commands (namespaced, e.g. `/superpowers-extended:init`), and the `superpowers-extended:code-reviewer` / `superpowers-extended:test-engineer` agents from `template/.claude/`.
+- **Codex:** `codex plugin marketplace add transparent-pegasus/superpowers-extended`, then `codex plugin add superpowers-extended@superpowers-extended`. Exposes the skills from `template/.agents/skills/` and the workflow commands from `template/workflows/` (Codex surfaces plugin commands as skills). Codex plugins cannot ship agent personas — the role boundaries are enforced by the skills themselves.
+- **Cursor:** install from this repository (Cursor Marketplace or a team marketplace); the manifest at `.cursor-plugin/plugin.json` exposes the skills (`template/.agents/skills/`), the workflow commands (`template/workflows/`), and the `code-reviewer` / `test-engineer` agents (`template/.agents/agents/`).
 
-**Caveat:** plugin files are read-only, so repo-specific placeholders (`<TARGETED_TEST_COMMAND>`, `<PLAN_PATH_PATTERN>`, …) stay unfilled — agents will interpret them generically or ask. To wire real values, declare them in the target repo's `CLAUDE.md` / `AGENTS.md`; **[`template/.superpowers-extended/INIT.md`](./template/.superpowers-extended/INIT.md)** enumerates every placeholder and the files that reference them.
+**After installing:** run `/superpowers-extended:init` once per repository. Plugin files are read-only, so repo-specific values (`<TARGETED_TEST_COMMAND>`, `<PLAN_PATH_PATTERN>`, …) are never written into the pack; instead, the init workflow detects the repo's tooling, confirms the values with you, and writes a `Superpowers Extended Configuration` section into the target repo's `CLAUDE.md` / `AGENTS.md`. Every skill, command, and agent resolves its `<KEY>` placeholders from that section.
 
 ### Updating an existing installation
 
-Plugin installs update through the marketplace (`/plugin marketplace update` in Claude Code, `codex plugin marketplace upgrade` for Codex). For repositories that carry a copied-in pack, follow **[`template/.superpowers-extended/UPDATE.md`](./template/.superpowers-extended/UPDATE.md)**. In the target repo this file lives at `.superpowers-extended/UPDATE.md`. It fetches the latest changelog copy into `.superpowers-extended/changelogs/`, then walks you through a diff-driven cherry-pick of each unseen entry with explicit handling for `template/` path translation, filled placeholders, and local customizations.
+Plugin installs update through the marketplace (`/plugin marketplace update` in Claude Code, `codex plugin marketplace upgrade` for Codex); the repo-local `Superpowers Extended Configuration` section survives updates untouched because the pack never stores repo-specific values in its own files. Repositories that carry a checked-in copy of `template/` update by diffing the new `template/` against their copy and applying the differences (the [`changelogs/`](./changelogs/) entries document what changed in each refresh).
 
 ## Contributing
 

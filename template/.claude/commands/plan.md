@@ -6,6 +6,10 @@ description: Interactive workflow for brainstorming and plan creation only
 
 This command runs only the discovery and planning stages of the development cycle. Follow these steps and move on as soon as the design discussion is complete.
 
+## Configuration
+
+`<KEY>` placeholders in this workflow (for example `<PLAN_PATH_PATTERN>`) resolve from the `Superpowers Extended Configuration` section of the repository's instruction files (`CLAUDE.md` / `AGENTS.md`). If that section is missing, run the pack's init workflow first: `/superpowers-extended:init` when the pack is installed as a plugin, or `workflows/init.md` in a checked-in copy.
+
 ## Execution Steps
 
 1. Brainstorming

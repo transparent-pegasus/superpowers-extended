@@ -41,7 +41,7 @@ The **sole** agent permitted to write test code in this workspace. This separati
 
 | Platform | How to dispatch |
 |---|---|
-| Claude Code | Agent tool with `subagent_type: code-reviewer` or `subagent_type: test-engineer`. |
+| Claude Code | Agent tool with `subagent_type: code-reviewer` or `subagent_type: test-engineer` (`superpowers-extended:code-reviewer` / `superpowers-extended:test-engineer` under a plugin install). |
 | Codex / Cursor | Reference `.agents/agents/<name>.md` in the prompt; the persona file describes the contract the agent must follow. |
 | Gemini CLI | Invoke the sub-agent by name. |
 

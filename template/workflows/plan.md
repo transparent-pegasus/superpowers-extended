@@ -14,6 +14,10 @@ Whenever this workflow saves a deliverable, also save any corresponding design/p
 
 Do not edit workflow files unless the user's current request explicitly asks to change a workflow file or workflow behavior. A workflow path alone can select the workflow context; it is not permission to edit that file. For example, `update workflows/plan.md ...` permits editing the workflow, while `workflows/plan.md add a feature ... to the app` does not.
 
+## Configuration
+
+`<KEY>` placeholders in this workflow (for example `<PLAN_PATH_PATTERN>`) resolve from the `Superpowers Extended Configuration` section of the repository's instruction files (`CLAUDE.md` / `AGENTS.md`). If that section is missing, follow `workflows/init.md` first (surfaced as `/superpowers-extended:init` when the pack is installed as a Claude Code plugin).
+
 ## Execution Steps
 
 1. Brainstorming

@@ -4,6 +4,12 @@ Workflows tie specialized agents and skills into end-to-end development procedur
 
 ## Available Workflows
 
+### `/init`
+
+One-time repository initialization. Detects the repo's tooling, confirms values with the user, and writes the `Superpowers Extended Configuration` section into the repo's `CLAUDE.md` / `AGENTS.md` — the section every other workflow, skill, and agent uses to resolve `<KEY>` placeholders (`<PLAN_PATH_PATTERN>`, `<BASELINE_VERIFICATION_COMMAND>`, …). Pack files themselves are never edited. On Claude Code plugin installs it surfaces as `/superpowers-extended:init`.
+
+Use when: the pack was just installed (plugin or checked-in copy), or the repo's test/verification commands changed.
+
 ### `/full_cycle`
 
 The full development cycle for a new feature or sizeable change. Equivalent to `/plan` followed by post-plan execution (`/execute` or `/execute_parallel`): brainstorm → approved plan → isolate → implementation (with parallel testing) → documentation update → repository verification → final review → integration.
@@ -36,7 +42,7 @@ Use when: the change is small enough to land without a separate written plan or 
 
 ## Guarantees
 
-All five workflows share the same guardrails:
+All development workflows share the same guardrails:
 
 - **Safety**: Never write to `main`/`master` without explicit user consent; work happens on a feature branch (and, for most workflows, in a dedicated worktree).
 - **Quality**: No task is marked complete without RED-GREEN evidence and a task review that returns both spec-compliance and code-quality verdicts.

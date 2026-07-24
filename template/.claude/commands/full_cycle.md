@@ -6,6 +6,10 @@ description: Interactive workflow to execute the entire development cycle from b
 
 This command executes the full development cycle interactively. Follow these steps and move on as soon as each stage is complete.
 
+## Configuration
+
+`<KEY>` placeholders in this workflow (for example `<PLAN_PATH_PATTERN>`) resolve from the `Superpowers Extended Configuration` section of the repository's instruction files (`CLAUDE.md` / `AGENTS.md`). If that section is missing, run the pack's init workflow first: `/superpowers-extended:init` when the pack is installed as a plugin, or `workflows/init.md` in a checked-in copy.
+
 ## Execution Steps
 
 1. Brainstorming
@@ -48,7 +52,7 @@ If only documentation, workflow, or agent-instruction files changed, note that n
 If any non-documentation file changed, run repository verification:
 - always run `<BASELINE_VERIFICATION_COMMAND>`
 - also run `<SUPPLEMENTAL_VERIFICATION_COMMANDS>` that apply to the touched surfaces, such as CLI smoke tests, integration checks, deploy checks, schema/code generation, or image builds
-If `<BASELINE_VERIFICATION_COMMAND>` or `<SUPPLEMENTAL_VERIFICATION_COMMANDS>` have not been initialized for the repository, stop and use `.superpowers-extended/INIT.md` before proceeding.
+If `<BASELINE_VERIFICATION_COMMAND>` or `<SUPPLEMENTAL_VERIFICATION_COMMANDS>` are not declared in the repository's `Superpowers Extended Configuration` section, stop and run the pack's init workflow (`/superpowers-extended:init` as a plugin, or `workflows/init.md` in a checked-in copy) before proceeding.
 If a required verification command cannot run because Docker, gcloud, or another external dependency is unavailable, report the blocker explicitly and stop until the user decides whether to skip that check.
 Proceed to Step 8 only when verification evidence is fresh and successful.
 
