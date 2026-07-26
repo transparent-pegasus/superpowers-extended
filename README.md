@@ -12,7 +12,7 @@
 - **Visual brainstorming companion (optional).** Browser-based mockups, diagrams, and visual comparisons alongside terminal conversation when a question is better seen than read.
 - **Codegraph-assisted discovery (optional).** When a codegraph plugin/tool is available, skills use it to find related files, symbols, callers, callees, and impact surfaces before planning, editing, debugging, testing, or reviewing.
 
-Tracks upstream [obra/superpowers](https://github.com/obra/superpowers) — currently synced to v6.1.1 (`d884ae0`).
+Tracks upstream [obra/superpowers](https://github.com/obra/superpowers) — currently synced to v6.2.0 (`3dcbd5c`).
 
 ## Optional Codegraph Integration
 

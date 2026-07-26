@@ -111,10 +111,13 @@ Subagent (general-purpose):
 
     ## After Review Findings
 
-    If a reviewer finds issues and you fix them, re-run the verification that
-    covers the amended code and append the results to your report file. If the
-    fix requires new or changed tests, request them from the test-engineer.
-    Reviewers will not re-run tests for you — your report is the test evidence.
+    If the task review finds issues, you will be resumed with the findings.
+    Fix them, re-run the verification that covers the amended code, and append
+    a fix report to your report file: what you changed, the covering
+    verification you ran, the command, and the output. If the fix requires new
+    or changed tests, request them from the test-engineer. Reviewers will not
+    re-run tests for you — your report is the test evidence. Then reply with
+    the same short status contract as your first report.
 
     ## Report Format
 

@@ -13,10 +13,10 @@ Skills live in a single tree at `skills/<name>/SKILL.md`. Claude Code, Codex, an
 
 ## Operational & Execution
 
-- **`subagent-driven-development`** — Primary implementation engine. Dispatches a fresh implementer per task, hands task briefs/review packages through files, runs one task review with separate spec-compliance and code-quality verdicts, and finishes with a broad whole-branch review. Implementer status protocol: `DONE / DONE_WITH_CONCERNS / BLOCKED / NEEDS_CONTEXT`. Reviewers are dispatched as the named `code-reviewer` agent (not `general-purpose`). Includes model-selection guidance, pre-flight plan review, and a durable progress ledger.
+- **`subagent-driven-development`** — Primary implementation engine. Dispatches a fresh implementer per task, hands task briefs/review packages through files, runs one task review with separate spec-compliance and code-quality verdicts, and finishes with a broad whole-branch review. Implementer status protocol: `DONE / DONE_WITH_CONCERNS / BLOCKED / NEEDS_CONTEXT`. Reviewers are dispatched as the named `code-reviewer` agent (not `general-purpose`). Failed reviews enter a five-round fix loop (resume the implementer for rounds 1-3, escalate to a fresh implementer on a more capable model for 4-5), each round closed by a scoped re-review (`re-review-prompt.md`); at the cap the controller adjudicates each open finding. Includes model-selection guidance, pre-flight plan review, and a per-plan workspace (`.superpowers/sdd/<plan>/`) holding a durable progress ledger.
 - **`executing-plans`** — Alternative for batch execution with human-in-the-loop checkpoints. Good for a separate session.
 - **`dispatching-parallel-agents`** — Partition 2+ independent tasks and dispatch one subagent per domain concurrently.
-- **`finishing-a-development-branch`** — Verify tests, then present four merge/PR/keep/discard options. Cleans up the worktree.
+- **`finishing-a-development-branch`** — Verify tests, then present three merge/PR/keep options. Discarding happens only when the human explicitly asks. Cleans up the worktree.
 
 ## Quality & Verification
 
