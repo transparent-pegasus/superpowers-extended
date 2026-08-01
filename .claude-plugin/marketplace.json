@@ -8,7 +8,7 @@
     {
       "name": "superpowers-extended",
       "description": "Extension pack for coding agents: specialized roles, structured skills, and multi-phase workflows tracking obra/superpowers, with codegraph-assisted discovery",
-      "version": "2.1.0",
+      "version": "2.1.1",
       "source": "./",
       "author": {
         "name": "transparent-pegasus"
